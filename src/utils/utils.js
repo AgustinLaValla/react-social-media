@@ -16,3 +16,12 @@ export const appTheme = {
         }
     }
 }
+
+
+export const getHeaders = (token) => ({
+    headers: {
+        Authorization: `Bearer ${token}`
+    }
+}); 
+
+export const getImageUrl = (picVersion, picId) => `https://res.cloudinary.com/dnfm4fq8d/image/upload/v${picVersion}/${picId}`

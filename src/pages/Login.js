@@ -62,8 +62,8 @@ const Login = ({ classes }) => {
 
     const history = useHistory();
 
-    const { userData, error } = useSelector(state => state.user);
-    const { loading, openErrorsDialog } = useSelector(state => state.ui);
+    const { userData, error, loading } = useSelector(state => state.user);
+    const { openErrorsDialog } = useSelector(state => state.ui);
     const dispatch = useDispatch();
 
     const formik = useFormik({
@@ -77,9 +77,8 @@ const Login = ({ classes }) => {
 
     return (
         <div>
-            <Grid container className={classes.form}>
-                <Grid item md></Grid>
-                <Grid item md>
+            <Grid container className={classes.form} justify="center">
+                <Grid item xs={12} sm={8} md={6} lg={4}>
                     <Card>
                         <CardContent>
                             <CardMedia image={AppIcon} className={classes.image} />
@@ -130,14 +129,12 @@ const Login = ({ classes }) => {
                         </CardContent>
                     </Card>
                 </Grid>
-                <Grid item md>
-                </Grid>
             </Grid>
 
             <ErrorMessageDialog
                 open={openErrorsDialog}
                 message={error}
-                onClose={() => dispatch({ type: fromTYPES.CLEAR_AUTH_ERRORS })}
+                onClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                 closeDialog={() => dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: false })}
             />
 

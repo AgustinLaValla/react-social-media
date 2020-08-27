@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import './index.css';
 import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Home } from './pages/Home';
@@ -11,21 +11,37 @@ import { appTheme } from './utils/utils';
 import Cookie from 'js-cookie';
 import jwtDecode from 'jwt-decode';
 import AuthRoute from './utils/AuthRoute';
+import store from './redux/store';
+import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT } from './redux/types';
+import { useSelector, useDispatch } from 'react-redux';
+import socketIOClient from "socket.io-client";
 
 const theme = createMuiTheme(appTheme);
 
 const token = Cookie.get('token');
-let authenticated;
 if (token) {
   const decodedToken = jwtDecode(token);
   if (decodedToken.exp * 100 < Date.now()) {
-    authenticated = true;
+    const userData = Cookie.getJSON('userData');
+    store.dispatch({ type: SET_AUTHENTICATED, payload: userData })
   } else {
-    authenticated = false;
+    store.dispatch({ type: SET_UNAUTHENTICATED });
   }
 }
 
 function App() {
+  
+  const { authenticated } = useSelector(state => state.user);
+
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    if (authenticated) {
+      const socket = socketIOClient('http://127.0.0.1:4000');
+      dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: socket });
+    }
+  }, [authenticated]);
+
   return (
     <div className="App">
       <Router>
@@ -34,8 +50,8 @@ function App() {
           <Switch>
             <div className="container">
               <Route exact path='/' component={Home} />
-              <AuthRoute exact path='/login' component={Login}  authenticated={false}/>
-              <AuthRoute exact path='/signup' component={Signup}  authenticated={false}/>
+              <AuthRoute exact path='/login' component={Login} authenticated={authenticated} />
+              <AuthRoute exact path='/signup' component={Signup} authenticated={authenticated} />
             </div>
           </Switch>
         </ThemeProvider>

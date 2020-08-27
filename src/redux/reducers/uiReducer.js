@@ -2,7 +2,9 @@ import * as fromTYPES from '../types';
 
 const initialState = {
     loading: false,
-    openErrorsDialog: false
+    activateLinearProgress: false,
+    openErrorsDialog: false,
+    openEditUserDetailsDialog:false
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -17,6 +19,24 @@ export const uiReducer = (state = initialState, action) => {
             return {
                 ...state,
                 openErrorsDialog: action.payload
+            }
+
+        case fromTYPES.ACTIVATE_LINEAR_PROGRESS:
+            return {
+                ...state,
+                activateLinearProgress: true
+            }
+
+        case fromTYPES.DEACTIVATE_LINEAR_PROGRESS:
+            return {
+                ...state,
+                activateLinearProgress: false
+            };
+
+        case fromTYPES.OPEN_USER_DETAILS_DIALOG:
+            return {
+                ...state,
+                openEditUserDetailsDialog: action.payload
             }
 
         default:

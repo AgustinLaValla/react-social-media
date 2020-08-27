@@ -19,30 +19,10 @@ import Cookie from 'js-cookie'
 import { signup } from '../redux/actions/userActions';
 import { useSelector, useDispatch } from 'react-redux';
 import * as fromTYPES from '../redux/types';
+import { getStyles } from '../utils/styles';
+import { makeStyles } from '@material-ui/core';
 
-const styles = {
-    form: {
-        textAlign: 'center'
-    },
-    pageTitle: {
-        margin: '10px auto 10px auto'
-    },
-    image: {
-        margin: '20px auto 20px auto',
-        width: '50px',
-        height: '50px'
-    },
-    textField: {
-        width: '100%',
-        margin: '20px 0px',
-        fontSize: '18px'
-    },
-    button: {
-        width: '100%',
-        marginTop: '20px'
-    }
-}
-
+const useStyles = makeStyles(theme => getStyles(theme));
 
 const initialValues = { username: '', email: '', password: '', confirmPassword: '' };
 
@@ -56,8 +36,10 @@ const validationSchema = Yup.object().shape({
     })
 })
 
-const Signup = ({ classes }) => {
-    
+const Signup = () => {
+
+    const classes = useStyles();
+
     const { userData, error } = useSelector(state => state.user);
     const { loading, openErrorsDialog } = useSelector(state => state.ui);
     const dispatch = useDispatch();
@@ -134,8 +116,10 @@ const Signup = ({ classes }) => {
                                     className={classes.button}
                                     disabled={
                                         Object.keys(formik.errors).length > 0
+                                        || formik.values.username === ''
                                         || formik.values.email === ''
                                         || formik.values.password === ''
+                                        || formik.values.confirmPassword === ''
                                     }
                                 >
                                     {!loading ? 'Singup' : 'Loading...'}
@@ -152,7 +136,7 @@ const Signup = ({ classes }) => {
             <ErrorMessageDialog
                 open={openErrorsDialog}
                 message={error}
-                onClose={() => dispatch({ type: fromTYPES.CLEAR_AUTH_ERRORS })}
+                onClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                 closeDialog={() => dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: false })}
             />
 
@@ -161,9 +145,4 @@ const Signup = ({ classes }) => {
 }
 
 
-Signup.propTypes = {
-    classes: PropTypes.object.isRequired
-}
-
-
-export default withStyles(styles)(Signup)
+export default Signup;
