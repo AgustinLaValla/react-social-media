@@ -4,7 +4,7 @@ import { BrowserRouter as Router, Route, Switch } from 'react-router-dom'
 import { Home } from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import { Navbar } from './components/Navbar';
+import { Navbar } from './components/layout/Navbar';
 import { createMuiTheme } from '@material-ui/core';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { appTheme } from './utils/utils';

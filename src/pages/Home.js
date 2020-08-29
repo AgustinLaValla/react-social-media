@@ -1,11 +1,11 @@
 import React, { useEffect, useState } from 'react'
 import { Button, Grid } from '@material-ui/core';
 import axios from 'axios';
-import { Post } from '../components/Post';
+import { Post } from '../components/post/Post';
 import Cookie from 'js-cookie';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPosts } from '../redux/actions/postsActions';
-import { Profile } from '../components/Profile';
+import { Profile } from '../components/profile/Profile';
 
 
 export const Home = () => {
@@ -13,6 +13,8 @@ export const Home = () => {
     const posts = useSelector(state => state.posts.posts);
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
+
+    console.log(posts);
 
     const getPostsList = () => {
         const token = Cookie.getJSON('token');

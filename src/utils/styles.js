@@ -75,7 +75,7 @@ export const getStyles = (theme) => ({
     card: {
         display: 'flex',
         marginBottom: '20px',
-        position:'relative'
+        position: 'relative'
     },
     cardImage: {
         minWidth: '200px',
@@ -88,6 +88,54 @@ export const getStyles = (theme) => ({
     deleteButton: {
         position: 'absolute',
         left: '90%',
+        top: '13%'
+    },
+    expandButton: {
+        position: 'absolute',
+        left: '90%',
         bottom: '13%'
     },
+    addPostBtn: {
+        margin: '0px 10px 10px 0px'
+    },
+    DialogContent: {
+        padding: '20px'
+    },
+    closeIcon: {
+        position: 'absolute',
+        right: 0,
+        margin: '10px 10px 0px 0px',
+        cursor: 'pointer'
+    },
+    invisibleSeparator: {
+        border: 'none',
+        margin: 4
+    },
+    visibleSeparator: {
+        width: '100%',
+        margin: 4
+    },
+    profileImage: {
+        width: '200px',
+        height: '200px',
+        borderRadius: '50%',
+        objectFit: 'cover'
+    },
+    commentsContainer: {
+        marginTop: '15px'
+    },
+
+    commentImage: {
+        width: '60px',
+        height: '60px',
+        borderRadius: '50%',
+        objectFit: 'cover'
+    },
+    commentBtn: {
+        margin: '10px 0px'
+    },
+    postCommentFormContainer: {
+        marginTop:'25px'
+    }
+
 })

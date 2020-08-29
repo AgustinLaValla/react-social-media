@@ -10,7 +10,7 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
-import { ErrorMessageDialog } from '../components/ErrorMessageDialog';
+import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
 import { login, signup } from '../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';

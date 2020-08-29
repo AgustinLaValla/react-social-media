@@ -1,8 +1,8 @@
 import React, { useState, Fragment } from 'react';
 import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, EditButton, TextField, Tooltip } from '@material-ui/core';
-import { getStyles } from '../utils/styles';
+import { getStyles } from '../../utils/styles';
 import { useDispatch } from 'react-redux';
-import { addOrChangeUserDetails } from '../redux/actions/userActions';
+import { addOrChangeUserDetails } from '../../redux/actions/userActions';
 
 
 const useStyles = makeStyles(theme => getStyles(theme));

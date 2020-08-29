@@ -12,7 +12,7 @@ import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import axios from 'axios';
 import { useFormik } from 'formik';
-import { ErrorMessageDialog } from '../components/ErrorMessageDialog';
+import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
 import { url } from '../utils/utils';
 import Cookie from 'js-cookie'

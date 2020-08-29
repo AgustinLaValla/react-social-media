@@ -56,12 +56,13 @@ export const logout = () => async dispatch => {
     Cookie.remove('token');
 }
 
-export const addOrChangeUserDetails = (id, userDetails) => async dispatch => {
+export const addOrChangeUserDetails = (id, userDetails, socket) => async dispatch => {
     dispatch({type: fromTYPES.ACTIVATE_LINEAR_PROGRESS});
     const token = Cookie.getJSON('token');
     try {
         const { data } = await axios.put(`${url}/user/add-user-details/${id}`, userDetails, getHeaders(token));
         Cookie.set('userData', JSON.stringify(data.user));
+        socket.emit('refresh_userData');
         dispatch({type:fromTYPES.SET_AUTHENTICATED, payload: data.user});
         dispatch({type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS});
     } catch (error) {

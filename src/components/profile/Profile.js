@@ -2,23 +2,23 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { makeStyles, Button, Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
 import MuiLink from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
-import { getImageUrl } from '../utils/utils';
+import { getImageUrl } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import * as dayjs from 'dayjs';
 import axios from 'axios';
-import { url, getHeaders } from '../utils/utils';
+import { url, getHeaders } from '../../utils/utils';
 import Cookie from 'js-cookie';
-import * as fromTYPES from '../redux/types';
+import * as fromTYPES from '../../redux/types';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { logout } from '../redux/actions/userActions';
-import { refreshUserData } from '../redux/actions/userActions';
-import { getStyles } from '../utils/styles';
+import { logout } from '../../redux/actions/userActions';
+import { refreshUserData } from '../../redux/actions/userActions';
+import { getStyles } from '../../utils/styles';
 import { EditDetails } from './EditDetails';
 import EditIcon from '@material-ui/icons/Edit';
-import { ErrorMessageDialog } from '../components/ErrorMessageDialog';
+import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 

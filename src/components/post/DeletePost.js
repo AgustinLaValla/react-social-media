@@ -2,12 +2,12 @@ import React, { Fragment, useState } from 'react'
 import { Button, Dialog, DialogTitle, DialogActions, makeStyles } from '@material-ui/core';
 import DeleteOutlineIcon from '@material-ui/icons/DeleteOutline';
 import { useSelector, useDispatch } from 'react-redux';
-import MyButton from './MyButton';
-import { getStyles } from '../utils/styles';
+import MyButton from '../layout/MyButton';
+import { getStyles } from '../../utils/styles';
 import axios from 'axios';
-import { url, getHeaders } from '../utils/utils';
+import { url, getHeaders } from '../../utils/utils';
 import Cookie from 'js-cookie';
-import * as fromTYPES from '../redux/types';
+import * as fromTYPES from '../../redux/types';
 
 const useStyles = makeStyles((theme) => getStyles(theme));
 

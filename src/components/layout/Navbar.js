@@ -1,16 +1,19 @@
-import React, { Fragment } from 'react';
+import React, { Fragment, useState } from 'react';
 import { AppBar, Toolbar, Button, LinearProgress, makeStyles } from '@material-ui/core';
 import { Link } from 'react-router-dom';
-import { getStyles } from '../utils/styles';
+import { getStyles } from '../../utils/styles';
 import { useSelector } from 'react-redux';
 import MyButton from './MyButton';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import NotificationsIcon from '@material-ui/icons/Notifications';
+import { AddPost } from '../post/AddPost';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
 export const Navbar = () => {
+
+    const [openAddPostDialog, setOpenAddPostDialog] = useState()
 
     const classes = useStyles();
 
@@ -27,6 +30,7 @@ export const Navbar = () => {
                         <MyButton
                             tipTitle="Share a post"
                             tipClassName={classes.tooltip}
+                            onClick={() => setOpenAddPostDialog(true)}
                         >
                             <AddIcon color="primary" />
                         </MyButton>
@@ -56,8 +60,9 @@ export const Navbar = () => {
                     </Fragment>
 
                 }
-                {activateLinearProgress && <LinearProgress className={classes.linearProgress} />}
             </Toolbar>
+            {activateLinearProgress && <LinearProgress color="secondary" className={classes.linearProgress} />}
+            <AddPost open={openAddPostDialog} handleClose={() => setOpenAddPostDialog(false)}/>
         </AppBar>
     )
 }
