@@ -1,7 +1,5 @@
-import React, { useState } from 'react'
+import React from 'react'
 import * as Yup from 'yup';
-import withStyles from '@material-ui/core/styles/withStyles';
-import PropTypes from 'prop-types';
 import Grid from '@material-ui/core/Grid';
 import AppIcon from '../images/logo.png'
 import Typography from '@material-ui/core/Typography';
@@ -10,12 +8,9 @@ import Card from '@material-ui/core/Card'
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
-import axios from 'axios';
 import { useFormik } from 'formik';
 import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
-import { url } from '../utils/utils';
-import Cookie from 'js-cookie'
 import { signup } from '../redux/actions/userActions';
 import { useSelector, useDispatch } from 'react-redux';
 import * as fromTYPES from '../redux/types';
@@ -40,7 +35,7 @@ const Signup = () => {
 
     const classes = useStyles();
 
-    const { userData, error } = useSelector(state => state.user);
+    const {  error } = useSelector(state => state.user);
     const { loading, openErrorsDialog } = useSelector(state => state.ui);
     const dispatch = useDispatch();
     

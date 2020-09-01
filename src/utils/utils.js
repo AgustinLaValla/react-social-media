@@ -24,4 +24,7 @@ export const getHeaders = (token) => ({
     }
 }); 
 
-export const getImageUrl = (picVersion, picId) => `https://res.cloudinary.com/dnfm4fq8d/image/upload/v${picVersion}/${picId}`
+export const getImageUrl = (picVersion, picId) => `https://res.cloudinary.com/dnfm4fq8d/image/upload/v${picVersion}/${picId}`;
+
+export const saveUserData = (userData) => localStorage.setItem('userData',JSON.stringify(userData));
+export const getUserData = () => JSON.parse(localStorage.getItem('userData'));

@@ -1,6 +1,4 @@
-import React, { useState } from 'react';
-import withStyles from '@material-ui/core/styles/withStyles';
-import PropTypes from 'prop-types';
+import React from 'react';
 import Grid from '@material-ui/core/Grid';
 import AppIcon from '../images/logo.png'
 import Typography from '@material-ui/core/Typography';
@@ -12,32 +10,13 @@ import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
 import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
-import { login, signup } from '../redux/actions/userActions';
+import { login } from '../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import * as fromTYPES from '../redux/types';
+import { makeStyles } from '@material-ui/core';
+import { getStyles } from '../utils/styles';
 
-const styles = {
-    form: {
-        textAlign: 'center'
-    },
-    pageTitle: {
-        margin: '10px auto 10px auto'
-    },
-    image: {
-        margin: '20px auto 20px auto',
-        width: '50px',
-        height: '50px'
-    },
-    textField: {
-        width: '100%',
-        margin: '20px 0px',
-        fontSize: '18px'
-    },
-    button: {
-        width: '100%',
-        marginTop: '20px'
-    }
-}
+const useStyles = makeStyles(theme => getStyles(theme));
 
 const initialValues = { email: '', password: '' };
 
@@ -58,7 +37,9 @@ const validate = (values) => {
 }
 
 
-const Login = ({ classes }) => {
+const Login = () => {
+
+    const classes = useStyles();
 
     const history = useHistory();
 
@@ -142,4 +123,4 @@ const Login = ({ classes }) => {
     )
 }
 
-export default withStyles(styles)(Login)
+export default Login;

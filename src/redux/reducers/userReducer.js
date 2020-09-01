@@ -3,7 +3,8 @@ import * as fromTYPES from '../types';
 const initialState = {
     authenticated: false,
     userData: null,
-    loading:false,
+    visitedUserData: null,
+    loading: false,
     error: null
 }
 
@@ -13,7 +14,7 @@ export function userReducer(state = initialState, action) {
         case fromTYPES.SET_LOADING_USER:
             return {
                 ...state,
-                loading:true
+                loading: true
             }
 
         case fromTYPES.SET_AUTHENTICATED:
@@ -21,7 +22,7 @@ export function userReducer(state = initialState, action) {
                 ...state,
                 authenticated: true,
                 userData: { ...action.payload },
-                loading:false
+                loading: false
             }
 
         case fromTYPES.SET_UNAUTHENTICATED:
@@ -29,7 +30,7 @@ export function userReducer(state = initialState, action) {
                 ...state,
                 authenticated: false,
                 userData: null,
-                loading:false
+                loading: false
             }
 
 
@@ -37,13 +38,31 @@ export function userReducer(state = initialState, action) {
             return {
                 ...state,
                 error: action.payload,
-                loading:false
+                loading: false
             }
 
         case fromTYPES.CLEAR_USER_ERRORS:
             return {
                 ...state,
                 error: null
+            }
+
+        case fromTYPES.SET_VISITED_USER:
+            return {
+                ...state,
+                visitedUserData: { ...action.payload }
+            }
+
+        case fromTYPES.MARK_NOTIFICATION_AS_READ:
+
+            return {
+                ...state,
+                userData: {
+                    ...state.userData,
+                    notifications: state.userData.notifications.postNotifications.map(notification =>
+                        notification._id === action.payload ? { ...notification, read: true } : notification
+                    )
+                }
             }
 
         default: return state;

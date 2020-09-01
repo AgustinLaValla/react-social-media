@@ -83,7 +83,7 @@ export const Profile = () => {
                         <div className="profile-details">
                             <MuiLink
                                 component={Link}
-                                to={`/users/${userData._id}`}
+                                to={`/user/${userData._id}`}
                                 color="primary"
                                 variant="h5"
                             >
@@ -159,7 +159,7 @@ export const Profile = () => {
                     website={userData.website ? userData.website : null}
                     userId={userData._id ? userData._id : null}
                     close={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: false })}
-                    return
+                    socket={socket}
                 />}
             <ErrorMessageDialog
                 open={openErrorsDialog}

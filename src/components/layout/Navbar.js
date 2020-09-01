@@ -1,5 +1,5 @@
 import React, { Fragment, useState } from 'react';
-import { AppBar, Toolbar, Button, LinearProgress, makeStyles } from '@material-ui/core';
+import { AppBar, Toolbar, Button, LinearProgress, makeStyles, Tooltip, IconButton } from '@material-ui/core';
 import { Link } from 'react-router-dom';
 import { getStyles } from '../../utils/styles';
 import { useSelector } from 'react-redux';
@@ -8,6 +8,7 @@ import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import { AddPost } from '../post/AddPost';
+import { Notifications } from './Notifications';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -36,20 +37,15 @@ export const Navbar = () => {
                         </MyButton>
 
                         <Link>
-                            <MyButton
-                                tipTitle="Home"
-                                tipClassName={classes.tooltip}
-                            >
-                                <HomeIcon color="primary" />
-                            </MyButton>
+
+                            <Tooltip title="Home" className={classes.tooltip}>
+                                <IconButton  component={Link} to='/'>
+                                    <HomeIcon color="primary" />
+                                </IconButton>
+                            </Tooltip>
                         </Link>
 
-                        <MyButton
-                            tipTitle="Notifications"
-                            tipClassName={classes.tooltip}
-                        >
-                            <NotificationsIcon color="primary" />
-                        </MyButton>
+                        <Notifications/>
 
                     </Fragment>
                     :
@@ -62,7 +58,7 @@ export const Navbar = () => {
                 }
             </Toolbar>
             {activateLinearProgress && <LinearProgress color="secondary" className={classes.linearProgress} />}
-            <AddPost open={openAddPostDialog} handleClose={() => setOpenAddPostDialog(false)}/>
+            <AddPost open={openAddPostDialog} handleClose={() => setOpenAddPostDialog(false)} />
         </AppBar>
     )
 }

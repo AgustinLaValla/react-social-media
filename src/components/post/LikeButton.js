@@ -8,7 +8,7 @@ import axios from 'axios';
 import MyButton from '../layout/MyButton';
 import { connect } from 'react-redux';
 
-export const LikeButton = ({ authenticated, classes, post, userData,socket }) => {
+export const LikeButton = ({ authenticated, classes, post, userData, socket, fromVisitedUser }) => {
 
     const [postLiked, setPostLiked] = useState(false);
 
@@ -17,6 +17,10 @@ export const LikeButton = ({ authenticated, classes, post, userData,socket }) =>
             const token = Cookie.getJSON('token');
             await axios.put(`${url}/posts/add-like/${post._id}/${post.userId._id}`, {}, getHeaders(token));
             socket.emit('refresh_single_post');
+            socket.emit('refresh_userData');
+            if (fromVisitedUser) {
+                socket.emit('refresh_userVisited_post');
+            }
         } catch (error) {
             console.log(error);
         }
@@ -27,6 +31,9 @@ export const LikeButton = ({ authenticated, classes, post, userData,socket }) =>
             const token = Cookie.getJSON('token');
             await axios.put(`${url}/posts/unlike/${post._id}/${post.userId._id}`, {}, getHeaders(token));
             socket.emit('refresh_single_post');
+            if (fromVisitedUser) {
+                socket.emit('refresh_userVisited_post');
+            }
         } catch (error) {
             console.log(error);
         }

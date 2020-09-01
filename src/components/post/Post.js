@@ -8,7 +8,7 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { getImageUrl } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { refreshSinglePost } from '../../redux/actions/postsActions';
+import { refreshSinglePost, refreshVisitedUserPost } from '../../redux/actions/postsActions';
 import MyButton from '../layout/MyButton';
 import ChatIcon from '@material-ui/icons/Chat';
 import { DeletePost } from './DeletePost';
@@ -16,10 +16,11 @@ import { getStyles } from '../../utils/styles';
 import UnfoldMore from '@material-ui/icons/UnfoldMore';
 import { PostDialog } from './PostDialog';
 import { LikeButton } from './LikeButton';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Post = ({ post }) => {
+export const Post = ({ post, openDialog, fromVisitedUser }) => {
 
     const classes = useStyles();
     const { socket } = useSelector(state => state.socket);
@@ -35,9 +36,25 @@ export const Post = ({ post }) => {
         if (socket) {
             socket.on('refresh_single_post', () => dispatch(refreshSinglePost(post._id)));
         }
-        return () => socket.removeListener('refresh_single_post', () => dispatch(refreshSinglePost(post._id)));
+        return () => socket
+            ? socket.removeListener('refresh_single_post', () => dispatch(refreshSinglePost(post._id)))
+            : null;
     }, [socket]);
 
+    useEffect(() => {
+        if (socket && fromVisitedUser) {
+            socket.on('refresh_userVisited_post', () => dispatch(refreshVisitedUserPost(post._id)))
+        }
+        return () => socket
+            ? socket.removeListener('refresh_userVisited_post', () => dispatch(refreshVisitedUserPost(post._id)))
+            : null
+    }, [socket, fromVisitedUser])
+
+    useEffect(() => {
+        if (openDialog) {
+            setOpenPostDialog(true)
+        }
+    }, [openDialog])
 
     return (
         <Card className={classes.card}>
@@ -47,7 +64,7 @@ export const Post = ({ post }) => {
                 title="Profile image"
             />
             <CardContent className={classes.content}>
-                <Typography variant="h5" color="primary">{post.userId.username}</Typography>
+                <Typography variant="h5" color="primary" component={Link} to={`/user/${post.userId._id}`}>{post.userId.username}</Typography>
                 <Typography variant="body2" color="textSecondary">{dayjs(post.createdAt).fromNow()}</Typography>
                 <Typography variant="body1">{post.body}</Typography>
 
@@ -57,7 +74,7 @@ export const Post = ({ post }) => {
                 }
 
                 {/* Like button */}
-                <LikeButton {...{ authenticated, classes, post, userData }} socket={socket} />
+                <LikeButton {...{ authenticated, classes, post, userData, fromVisitedUser }} socket={socket} />
 
                 <MyButton tipTitle="comments" tipClassName={classes.tooltip}>
                     <ChatIcon color="primary" />

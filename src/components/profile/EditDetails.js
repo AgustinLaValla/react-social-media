@@ -1,5 +1,5 @@
 import React, { useState, Fragment } from 'react';
-import { makeStyles, Dialog, DialogTitle, DialogContent, DialogContentText, DialogActions, Button, EditButton, TextField, Tooltip } from '@material-ui/core';
+import { makeStyles, Dialog, DialogTitle, DialogContent, DialogActions, Button, EditButton, TextField, Tooltip } from '@material-ui/core';
 import { getStyles } from '../../utils/styles';
 import { useDispatch } from 'react-redux';
 import { addOrChangeUserDetails } from '../../redux/actions/userActions';
@@ -7,7 +7,7 @@ import { addOrChangeUserDetails } from '../../redux/actions/userActions';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const EditDetails = ({ open, handleClose, bio, location, website, userId, close }) => {
+export const EditDetails = ({ open, handleClose, bio, location, website, userId, close, socket, fromVisitedUser }) => {
 
     const classes = useStyles();
 
@@ -23,7 +23,7 @@ export const EditDetails = ({ open, handleClose, bio, location, website, userId,
 
     const handleSubmit = () => {
         if (userDetails.biography !== bio || userDetails.userLocation !== location || userDetails.userWebsite !== website) {
-            dispatch(addOrChangeUserDetails(userId, userDetails));
+            dispatch(addOrChangeUserDetails(userId, userDetails, socket, fromVisitedUser));
         }
         close();
     }

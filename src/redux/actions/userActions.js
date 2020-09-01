@@ -2,23 +2,23 @@ import axios from 'axios';
 import { url } from '../../utils/utils';
 import Cookie from 'js-cookie';
 import * as fromTYPES from '../types';
-import { getHeaders } from '../../utils/utils';
+import { getHeaders, saveUserData } from '../../utils/utils';
 
-export const login = (values, history) => async dispatch => {
+export const login = (values, history) => dispatch => {
 
     dispatch({ type: fromTYPES.SET_LOADING_USER });
+    let resp;
+    axios.post(`${url}/auth/login`, values)
+        .then(({ data }) => resp = data)
+        .then(() => Cookie.set('token', JSON.stringify(resp.token)))
+        .then(() => saveUserData(resp.user))
+        .then(() => dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: resp.user }))
+        .then(() => history.push('/'))
+        .catch(error => {
+            dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
+            dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
+        });
 
-    try {
-        const { data } = await axios.post(`${url}/auth/login`, values)
-        Cookie.set('token', JSON.stringify(data.token));
-        Cookie.set('userData', JSON.stringify(data.user));
-        dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
-        history.push('/');
-
-    } catch (error) {
-        dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
-        dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
-    }
 }
 
 export const signup = (values, history) => async dispatch => {
@@ -28,7 +28,7 @@ export const signup = (values, history) => async dispatch => {
     try {
         const { data } = await axios.post(`${url}/auth/register`, values);
         Cookie.set('token', JSON.stringify(data.token));
-        Cookie.set('userData', JSON.stringify(data.user));
+        saveUserData(data.user);
         dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
         history.push('/');
 
@@ -42,31 +42,63 @@ export const refreshUserData = (id) => async dispatch => {
     try {
         const token = Cookie.getJSON('token');
         const { data } = await axios.get(`${url}/user/${id}`, getHeaders(token));
-        Cookie.set('userData', JSON.stringify(data.user));
+        saveUserData(data.user)
         dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
-        dispatch({type:fromTYPES.DEACTIVATE_LINEAR_PROGRESS});
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
         console.log(error);
-        dispatch({type:fromTYPES.DEACTIVATE_LINEAR_PROGRESS});
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     }
 }
 
 export const logout = () => async dispatch => {
     dispatch({ type: fromTYPES.SET_UNAUTHENTICATED });
     Cookie.remove('token');
+    localStorage.clear();
 }
 
-export const addOrChangeUserDetails = (id, userDetails, socket) => async dispatch => {
-    dispatch({type: fromTYPES.ACTIVATE_LINEAR_PROGRESS});
+export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUserProfile = false) => async dispatch => {
+    dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     const token = Cookie.getJSON('token');
     try {
         const { data } = await axios.put(`${url}/user/add-user-details/${id}`, userDetails, getHeaders(token));
-        Cookie.set('userData', JSON.stringify(data.user));
+        saveUserData(data.user)
         socket.emit('refresh_userData');
-        dispatch({type:fromTYPES.SET_AUTHENTICATED, payload: data.user});
-        dispatch({type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS});
+        if (refreshVisitedUserProfile) {
+            socket.emit('refresh_visited_userData');
+        };
+        dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
-        dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
+        console.log(error);
+        dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error?.response?.data?.message });
         dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
+    }
+}
+
+export const getUser = (userId) => async dispatch => {
+    dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
+    const token = Cookie.getJSON('token');
+    try {
+        const { data } = await axios.get(`${url}/user/${userId}`, getHeaders(token));
+        dispatch({ type: fromTYPES.SET_VISITED_USER, payload: data.user })
+    } catch (error) {
+        dispatch({ type: fromTYPES.SET_VISITED_USER_ERRORS, payload: error.response.data.message })
+    }
+};
+
+
+export const changeProfilePic = (image, socket, refreshVisitedUserProfile = false) => async dispatch => {
+    const token = Cookie.getJSON('token');
+    dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
+    try {
+        await axios.put(`${url}/images/change-profile-image`, { image }, getHeaders(token));
+        socket.emit('refresh_userData');
+        if (refreshVisitedUserProfile) {
+            socket.emit('refresh_visited_userData');
+        }
+
+    } catch (error) {
+        console.log(error);
     }
 }

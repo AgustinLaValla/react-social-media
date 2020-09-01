@@ -2,6 +2,7 @@ import * as fromTYPES from '../types';
 
 const initialState = {
     posts: [],
+    visitedUserPosts: [],
     errors: null
 }
 
@@ -22,6 +23,18 @@ export const postsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 posts: [...state.posts.map(post => post._id === action.payload._id ? { ...action.payload } : post)]
+            }
+
+        case fromTYPES.SET_VISITED_USER_POSTS:
+            return {
+                ...state,
+                visitedUserPosts: [ ...action.payload ]
+            }
+
+        case fromTYPES.REFRESH_VISITED_USER_POST:
+            return {
+                ...state,
+                visitedUserPosts: [...state.visitedUserPosts.map(post => post._id === action.payload._id ? { ...action.payload } : post )]
             }
 
         default:
