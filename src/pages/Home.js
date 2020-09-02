@@ -14,8 +14,6 @@ export const Home = () => {
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
 
-    console.log(posts);
-
     const getPostsList = () => {
         const token = Cookie.getJSON('token');
         dispatch(getPosts(token));

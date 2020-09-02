@@ -6,7 +6,6 @@ import { getHeaders, saveUserData } from '../../utils/utils';
 
 export const login = (values, history) => dispatch => {
 
-    console.log('Login called')
     dispatch({ type: fromTYPES.SET_LOADING_USER });
     let resp;
     axios.post(`${url}/auth/login`, values)
@@ -29,7 +28,6 @@ export const googleLogin = (token, history) => async dispatch => {
         dispatch({type:fromTYPES.SET_AUTHENTICATED, payload:data.user});
         history.push('/');
     } catch (error) {
-        console.log(error);
         dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
         dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
     }
@@ -60,7 +58,6 @@ export const refreshUserData = (id) => async dispatch => {
         dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
-        console.log(error);
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     }
 }
@@ -87,7 +84,6 @@ export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUs
         dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
-        console.log(error);
         dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error?.response?.data?.message });
         dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
     }
@@ -116,7 +112,6 @@ export const changeProfilePic = (image, socket, refreshVisitedUserProfile = fals
         }
 
     } catch (error) {
-        console.log(error);
     }
 }
 

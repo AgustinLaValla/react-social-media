@@ -16,7 +16,7 @@ import { getStyles } from '../../utils/styles';
 import UnfoldMore from '@material-ui/icons/UnfoldMore';
 import { PostDialog } from './PostDialog';
 import { LikeButton } from './LikeButton';
-import { Link } from 'react-router-dom';
+import { Link, useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -26,9 +26,19 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
     const { socket } = useSelector(state => state.socket);
     const { userData, authenticated } = useSelector(state => state.user);
 
+    const history = useHistory();
+
     const [openPostDialog, setOpenPostDialog] = useState(false);
 
     const dispatch = useDispatch();
+
+    const handleOpenPostDialog = () => {
+        if(authenticated) {
+            setOpenPostDialog(true);
+        } else {
+            history.push('/login');
+        }
+    }
 
     dayjs.extend(relativeTime);
 
@@ -76,13 +86,13 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
                 {/* Like button */}
                 <LikeButton {...{ authenticated, classes, post, userData, fromVisitedUser }} socket={socket} />
 
-                <MyButton tipTitle="comments" tipClassName={classes.tooltip}>
+                <MyButton tipTitle="comments" tipClassName={classes.tooltip} onClick={handleOpenPostDialog}>
                     <ChatIcon color="primary" />
                 </MyButton>
                 <span>{post.commentCount}</span>
 
                 <MyButton
-                    onClick={() => setOpenPostDialog(true)}
+                    onClick={handleOpenPostDialog}
                     tipTitle="Expand post"
                     btnClassName={classes.expandButton}
                     tipClassName={classes.tooltip}

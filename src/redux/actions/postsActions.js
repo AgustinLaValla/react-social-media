@@ -32,7 +32,6 @@ export const refreshVisitedUserPost = postId => async dispatch => {
         const { data } = await axios.get(`${url}/posts/${postId}`, getHeaders(token));
         dispatch({ type: fromTYPES.REFRESH_VISITED_USER_POST, payload: data.post });
     } catch (error) {
-        console.log(error);
     }
 }
 
@@ -65,5 +64,4 @@ export const getUserPost = userId => async dispatch => {
     const token = Cookie.getJSON('token');
     axios.get(`${url}/posts/get_user_posts/${userId}`, getHeaders(token))
         .then(({ data }) => dispatch({ type: fromTYPES.SET_VISITED_USER_POSTS, payload: data.posts }))
-        .catch(console.log)
 }

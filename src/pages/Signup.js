@@ -25,7 +25,9 @@ const initialValues = { username: '', email: '', password: '', confirmPassword: 
 const validationSchema = Yup.object().shape({
     username: Yup.string().required('Username is required'),
     email: Yup.string().required('Email is required').email('Should be an email'),
-    password: Yup.string().required(),
+    password: Yup.string().required().matches(/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/, {
+        message: 'Password should have at least one Uppercase vowel, one lowercase vowel, one number, and one special character'
+    }),
     confirmPassword: Yup.string().required().when('password', {
         is: val => (val && val.length > 0) ? true : false,
         then: Yup.string().oneOf([Yup.ref("password")], 'Passwords do not match')
@@ -36,10 +38,10 @@ const Signup = () => {
 
     const classes = useStyles();
 
-    const {  error } = useSelector(state => state.user);
+    const { error } = useSelector(state => state.user);
     const { loading, openErrorsDialog } = useSelector(state => state.ui);
     const dispatch = useDispatch();
-    
+
     const history = useHistory();
 
     const formik = useFormik({

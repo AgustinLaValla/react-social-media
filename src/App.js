@@ -25,6 +25,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT } from './redux/types';
 //socket
 import socketIOClient from "socket.io-client";
+//server url
+import { herokuServerUrl } from './config/config';
 
 const theme = createMuiTheme(appTheme);
 
@@ -48,7 +50,7 @@ function App() {
 
   useEffect(() => {
     if (authenticated) {
-      const socket = socketIOClient('http://127.0.0.1:4000');
+      const socket = socketIOClient(`${herokuServerUrl}`);
       dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: socket });
     }
   }, [authenticated]);

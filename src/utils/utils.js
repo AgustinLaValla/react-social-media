@@ -1,4 +1,6 @@
-export const url = 'http://localhost:4000/api'
+import { herokuServerUrl } from '../config/config';
+
+export const url = `${herokuServerUrl}/api`;
 
 export const appTheme = {
     palette: {

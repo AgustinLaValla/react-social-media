@@ -26,7 +26,7 @@ const useStyles = makeStyles(theme => getStyles(theme));
 export const Profile = () => {
 
     const classes = useStyles();
-    const { userData, error } = useSelector(state => state.user);
+    const { userData, authenticated ,error } = useSelector(state => state.user);
     const { loading, openEditUserDetailsDialog, openErrorsDialog } = useSelector(state => state.ui);
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
@@ -69,7 +69,7 @@ export const Profile = () => {
     return (
         <div>
             {loading && <p>Loading...</p>}
-            {userData &&
+            {authenticated &&
                 <Paper className={classes.paper}>
                     <div className={classes.profile}>
                         <Tooltip title="Change profile pic" classes={{ tooltip: classes.tooltip }}>
@@ -149,7 +149,7 @@ export const Profile = () => {
                     </div>
                 </Paper>
             }
-            {!userData &&
+            {!authenticated &&
                 <Paper className={classes.paper}>
                     <Typography variant="body2" align="center">
                         No profile found, please login again.
@@ -160,7 +160,7 @@ export const Profile = () => {
                     </div>
                 </Paper>
             }
-            {userData &&
+            {authenticated &&
                 <EditDetails
                     open={openEditUserDetailsDialog}
                     handleClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}

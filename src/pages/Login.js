@@ -32,9 +32,9 @@ const validate = (values) => {
 
     if (!values.password) {
         errors.password = 'Password is Required';
-    } /*else if (!/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(values.password)) {
+    } else if (!/((?=.*\d)|(?=.*\W+))(?![.\n])(?=.*[A-Z])(?=.*[a-z]).*$/.test(values.password)) {
         errors.password = 'Password should have at least one Uppercase vowel, one lowercase vowel, one number, and one special character';
-    }*/
+    }
     return errors;
 }
 
