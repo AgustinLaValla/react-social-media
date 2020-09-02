@@ -29,7 +29,7 @@ export function userReducer(state = initialState, action) {
             return {
                 ...state,
                 authenticated: false,
-                userData: null,
+                userData: {},
                 loading: false
             }
 

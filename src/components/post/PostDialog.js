@@ -5,7 +5,7 @@ import { getStyles } from '../../utils/styles';
 import { Link } from 'react-router-dom';
 import CloseIcon from '@material-ui/icons/Close';
 import MyButton from '../layout/MyButton';
-import { getImageUrl } from '../../utils/utils';
+import { getUserImage } from '../../utils/utils';
 import dayjs from 'dayjs';
 import { LikeButton } from './LikeButton';
 import ChatIcon from '@material-ui/icons/Chat';
@@ -28,7 +28,7 @@ export const PostDialog = ({ open, handleClose, post, userData, socket }) => {
                 <Grid container spacing="16">
                     <Grid item sm={5}>
                         <img
-                            src={getImageUrl(post.userId.picVersion, post.userId.picId)}
+                            src={getUserImage(post.userId)}
                             className={classes.profileImage}
                             alt=""
                         />

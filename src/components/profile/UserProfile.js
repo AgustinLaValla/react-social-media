@@ -2,7 +2,7 @@ import React, { Fragment, useEffect, useRef, useState } from 'react'
 import { makeStyles, Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
 import MuiLink from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
-import { getImageUrl } from '../../utils/utils';
+import { getUserImage } from '../../utils/utils';
 import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
@@ -36,6 +36,7 @@ export const UserProfile = ({ user }) => {
         reader.onloadend = () => dispatch(changeProfilePic(reader.result, socket, isUserOwnProfile));
     };
 
+
     useEffect(() => {
         if (user && userData && user._id === userData._id) {
             setIsUserOwnProfile(true);
@@ -64,7 +65,7 @@ export const UserProfile = ({ user }) => {
                             <div className="image-wrapper">
                                 <img
                                     className="profile-image"
-                                    src={getImageUrl(user.picVersion, user.picId)}
+                                    src={getUserImage(userData)}
                                     onClick={() => inputFile.current.click()}
                                 />
                                 <input
@@ -81,7 +82,7 @@ export const UserProfile = ({ user }) => {
                             <div className="image-wrapper">
                                 <img
                                     className="profile-image"
-                                    src={getImageUrl(user.picVersion, user.picId)}
+                                    src={getUserImage(user)}
                                 />
                             </div>
 

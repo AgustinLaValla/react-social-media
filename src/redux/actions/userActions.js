@@ -6,6 +6,7 @@ import { getHeaders, saveUserData } from '../../utils/utils';
 
 export const login = (values, history) => dispatch => {
 
+    console.log('Login called')
     dispatch({ type: fromTYPES.SET_LOADING_USER });
     let resp;
     axios.post(`${url}/auth/login`, values)
@@ -19,6 +20,19 @@ export const login = (values, history) => dispatch => {
             dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
         });
 
+}
+export const googleLogin = (token, history) => async dispatch => {
+    try {
+        const { data } = await axios.post(`${url}/auth/google`, { token });
+        Cookie.set('token', JSON.stringify(data.token));
+        saveUserData(data.user);
+        dispatch({type:fromTYPES.SET_AUTHENTICATED, payload:data.user});
+        history.push('/');
+    } catch (error) {
+        console.log(error);
+        dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
+        dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
+    }
 }
 
 export const signup = (values, history) => async dispatch => {
@@ -51,10 +65,13 @@ export const refreshUserData = (id) => async dispatch => {
     }
 }
 
-export const logout = () => async dispatch => {
+export const logout = (googleSignOut) => async dispatch => {
     dispatch({ type: fromTYPES.SET_UNAUTHENTICATED });
     Cookie.remove('token');
     localStorage.clear();
+    if(googleSignOut) {
+        googleSignOut();
+    }
 }
 
 export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUserProfile = false) => async dispatch => {
@@ -102,3 +119,5 @@ export const changeProfilePic = (image, socket, refreshVisitedUserProfile = fals
         console.log(error);
     }
 }
+
+

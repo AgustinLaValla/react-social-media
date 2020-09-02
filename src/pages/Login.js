@@ -15,6 +15,8 @@ import { useDispatch, useSelector } from 'react-redux';
 import * as fromTYPES from '../redux/types';
 import { makeStyles } from '@material-ui/core';
 import { getStyles } from '../utils/styles';
+import { GoogleButton } from '../components/layout/GoogleButton';
+
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -54,7 +56,6 @@ const Login = () => {
             dispatch(login(values, history));
         }
     })
-
 
     return (
         <div>
@@ -103,10 +104,15 @@ const Login = () => {
                                 >
                                     {loading ? 'Loading...' : 'Login'}
                                 </Button>
-                                <Link to='/signup'>
-                                    <small className="login__bottomText">Do not have an account? Sign up here</small>
-                                </Link>
+
+
                             </form>
+
+                            <GoogleButton />
+
+                            <Link to='/signup'>
+                                <small className="login__bottomText">Do not have an account? Sign up here</small>
+                            </Link>
                         </CardContent>
                     </Card>
                 </Grid>

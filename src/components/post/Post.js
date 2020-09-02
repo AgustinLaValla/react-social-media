@@ -6,7 +6,7 @@ import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import { getImageUrl } from '../../utils/utils';
+import { getUserImage } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshSinglePost, refreshVisitedUserPost } from '../../redux/actions/postsActions';
 import MyButton from '../layout/MyButton';
@@ -60,7 +60,7 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
         <Card className={classes.card}>
             <CardMedia
                 className={classes.cardImage}
-                image={getImageUrl(post.userId.picVersion, post.userId.picId)}
+                image={getUserImage(post.userId)}
                 title="Profile image"
             />
             <CardContent className={classes.content}>

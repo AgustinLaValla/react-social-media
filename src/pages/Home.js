@@ -31,15 +31,15 @@ export const Home = () => {
 
     return (
         <Grid container spacing={2}>
-            <Grid item md={8} xs={12}>
-                {posts
+            <Grid item md={8} xs={12} className="animated fadeIn">
+                {posts && posts.length > 0 
                     ? posts.map(post =>
                         <Post key={post._id} post={post} />
                     )
-                    : <p>Loading...</p>
+                    :null
                 }
             </Grid>
-            <Grid item md={4} xs={12}>
+            <Grid item md={4} xs={12} className="animated fadeIn">
                 <Profile />
             </Grid>
         </Grid>

@@ -3,7 +3,7 @@ import Grid from '@material-ui/core/Grid';
 import Typography from '@material-ui/core/Typography';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import { getStyles } from '../../utils/styles';
-import { getImageUrl } from '../../utils/utils';
+import { getUserImage } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
 import { CommentForm } from './CommentForm';
@@ -20,7 +20,7 @@ export const Comments = ({ comments, postId, userId }) => {
             {comments.map((comment, index) => (
                 <Grid container spacing="4">
                     <Grid item sm={2}>
-                        <img src={getImageUrl(comment.userId.picVersion, comment.userId.picId)} className={classes.commentImage} />
+                        <img src={getUserImage(comment.userId)} className={classes.commentImage} />
                     </Grid>
                     <Grid item sm={9}>
                         <div className={classes.commentData}>

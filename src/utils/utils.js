@@ -22,9 +22,23 @@ export const getHeaders = (token) => ({
     headers: {
         Authorization: `Bearer ${token}`
     }
-}); 
+});
 
 export const getImageUrl = (picVersion, picId) => `https://res.cloudinary.com/dnfm4fq8d/image/upload/v${picVersion}/${picId}`;
+export const getUserImage = (userData) => {
 
-export const saveUserData = (userData) => localStorage.setItem('userData',JSON.stringify(userData));
+    if(!userData) {
+        return;
+    }
+
+    if (userData.img && userData.google) {
+        if (userData.picVersion && userData.picId && userData.picVersion !== '1591573111' && userData.picId !== 'avatar_tmoqrv.png') {
+            return getImageUrl(userData.picVersion, userData.picId);
+        }
+        return userData.img
+    }
+    return getImageUrl(userData.picVersion, userData.picId)
+};
+
+export const saveUserData = (userData) => localStorage.setItem('userData', JSON.stringify(userData));
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'));

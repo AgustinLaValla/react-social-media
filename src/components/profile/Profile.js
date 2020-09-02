@@ -2,14 +2,13 @@ import React, { Fragment, useEffect, useRef } from 'react'
 import { makeStyles, Button, Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
 import MuiLink from '@material-ui/core/Link';
 import { useSelector, useDispatch } from 'react-redux';
-import { getImageUrl } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
 import * as dayjs from 'dayjs';
 import axios from 'axios';
-import { url, getHeaders } from '../../utils/utils';
+import { url, getHeaders, getUserImage } from '../../utils/utils';
 import Cookie from 'js-cookie';
 import * as fromTYPES from '../../redux/types';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
@@ -19,10 +18,13 @@ import { getStyles } from '../../utils/styles';
 import { EditDetails } from './EditDetails';
 import EditIcon from '@material-ui/icons/Edit';
 import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
+import { useGoogleLogout } from 'react-google-login';
+import { clientId } from '../../config/config';  
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
 export const Profile = () => {
+
     const classes = useStyles();
     const { userData, error } = useSelector(state => state.user);
     const { loading, openEditUserDetailsDialog, openErrorsDialog } = useSelector(state => state.ui);
@@ -30,6 +32,12 @@ export const Profile = () => {
     const dispatch = useDispatch();
     const inputFile = useRef();
 
+    const onGoogleLogoutSuccess = () => dispatch(logout());
+
+    const { signOut } = useGoogleLogout({
+        onLogoutSuccess: onGoogleLogoutSuccess,
+        clientId
+    });
 
     const uploadImage = async (image) => {
         const token = Cookie.getJSON('token');
@@ -49,6 +57,8 @@ export const Profile = () => {
         reader.onloadend = () => uploadImage(reader.result);
     };
 
+    const handleLogout = () => userData.google ? signOut() : dispatch(logout);
+
     useEffect(() => {
         if (socket) {
             socket.on('refresh_userData', () => dispatch(refreshUserData(userData._id)));
@@ -66,7 +76,7 @@ export const Profile = () => {
                             <div className="image-wrapper">
                                 <img
                                     className="profile-image"
-                                    src={getImageUrl(userData.picVersion, userData.picId)}
+                                    src={getUserImage(userData)}
                                     onClick={() => inputFile.current.click()}
                                 />
                                 <input
@@ -115,7 +125,7 @@ export const Profile = () => {
                             <CalendarTodayIcon color="primary" />{' '}
                             <span>Joined from {dayjs(userData.createdAt).format('MMM-YYYY')}</span>
                             <br />
-                            <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
+                            <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
                                 <IconButton >
                                     <EditIcon
                                         onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}
@@ -131,10 +141,10 @@ export const Profile = () => {
                             <br />
                             <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
                                 <IconButton >
-                                    <ExitToAppIcon fontSize="large" onClick={() => dispatch(logout())} color="primary" />
+                                    <ExitToAppIcon fontSize="large" onClick={handleLogout} color="primary" />
                                 </IconButton>
                             </Tooltip>
-                            <span onClick={() => dispatch(logout())} style={{ cursor: 'pointer' }}>Logout</span>
+                            <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
                         </div>
                     </div>
                 </Paper>

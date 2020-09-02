@@ -25,10 +25,11 @@ export const User = () => {
 
 
     return (
-        <Grid container>
+        <Grid container className="animated fadeIn">
         <Grid item sm={8} xs={12}>
-            {visitedUserPosts && visitedUserPosts.length > 0 && visitedUserPosts.map(post =>
+            {visitedUserPosts && visitedUserPosts.length > 0 ? visitedUserPosts.map(post =>
                 <Post key={post._id} post={post} openDialog={postId && postId === post._id ? true : false} fromVisitedUser={true}/> )
+                :null
             }
         </Grid>
         <Grid item sm={4} xs={12}>
