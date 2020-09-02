@@ -1,6 +1,8 @@
-import { herokuServerUrl } from '../config/config';
 
-export const url = `${herokuServerUrl}/api`;
+
+const serverUri = process.env.REACT_APP_SERVER_URI;
+
+export const url = `${serverUri}/api`;
 
 export const appTheme = {
     palette: {

@@ -13,7 +13,8 @@ import { getStyles } from '../../utils/styles';
 import { EditDetails } from './EditDetails';
 import EditIcon from '@material-ui/icons/Edit';
 import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
-import { getUser, changeProfilePic ,logout } from '../../redux/actions/userActions';
+import { getUser, changeProfilePic, logout } from '../../redux/actions/userActions';
+import { useGoogleLogout } from 'react-google-login';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -29,6 +30,17 @@ export const UserProfile = ({ user }) => {
 
     const [isUserOwnProfile, setIsUserOwnProfile] = useState(false);
     const inputFile = useRef();
+
+    const clientId = process.env.REACT_APP_CLIENT_ID;
+
+    const onGoogleLogoutSuccess = () => dispatch(logout());
+
+    const { signOut } = useGoogleLogout({
+        onLogoutSuccess: onGoogleLogoutSuccess,
+        clientId
+    });
+
+    const handleLogout = () => userData.google ? signOut() : dispatch(logout());
 
     const handleInputFileChange = (imageFile) => {
         const reader = new FileReader();
@@ -145,10 +157,10 @@ export const UserProfile = ({ user }) => {
                         <Fragment>
                             <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
                                 <IconButton >
-                                    <ExitToAppIcon fontSize="large" onClick={() => dispatch(logout())} color="primary" />
+                                    <ExitToAppIcon fontSize="large" onClick={handleLogout} color="primary" />
                                 </IconButton>
                             </Tooltip>
-                            <span onClick={() => dispatch(logout())} style={{ cursor: 'pointer' }}>Logout</span>
+                            <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
                         </Fragment>
                     }
                 </div>
