@@ -19,6 +19,7 @@ import { EditDetails } from './EditDetails';
 import EditIcon from '@material-ui/icons/Edit';
 import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
 import { useGoogleLogout } from 'react-google-login';
+import { clientId } from '../../utils/utils';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -30,8 +31,6 @@ export const Profile = () => {
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
     const inputFile = useRef();
-
-    const clientId = process.env.REACT_APP_CLIENT_ID;
 
     const onGoogleLogoutSuccess = () => dispatch(logout());
 

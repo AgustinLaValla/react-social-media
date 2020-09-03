@@ -1,4 +1,5 @@
 export const getStyles = (theme) => ({
+
     linearProgress: {
         width: '100%'
     },
@@ -75,25 +76,40 @@ export const getStyles = (theme) => ({
     card: {
         display: 'flex',
         marginBottom: '20px',
-        position: 'relative'
+        position: 'relative',
+        [theme.breakpoints.down('sm')]: {
+            display: 'block'
+        }
     },
     cardImage: {
         minWidth: '200px',
         height: 'auto',
-        objectFit: 'cover'
+        objectFit: 'cover',
+        [theme.breakpoints.down('sm')]: {
+            width: 'auto',
+            minHeight: '200px',
+            objectFit: 'cover'
+        }
     },
     content: {
         padding: '25px',
     },
     deleteButton: {
-        position: 'absolute',
-        left: '90%',
-        top: '13%'
+        [theme.breakpoints.up('md')]: {
+            position: 'absolute',
+            left: '90%',
+            top: '13%',
+        }
     },
     expandButton: {
         position: 'absolute',
         left: '90%',
-        bottom: '13%'
+        bottom: '13%',
+        [theme.breakpoints.down('sm')]: {
+            position: 'absolute',
+            bottom: '8%',
+            left: '80%',
+        }
     },
     addPostBtn: {
         margin: '0px 10px 10px 0px'
@@ -135,7 +151,7 @@ export const getStyles = (theme) => ({
         margin: '10px 0px'
     },
     postCommentFormContainer: {
-        marginTop:'25px'
+        marginTop: '25px'
     }
 
 })

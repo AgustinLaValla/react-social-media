@@ -8,6 +8,8 @@ import axios from 'axios';
 import { url, getHeaders } from '../../utils/utils';
 import Cookie from 'js-cookie';
 import * as fromTYPES from '../../redux/types';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
 
 const useStyles = makeStyles((theme) => getStyles(theme));
 
@@ -40,14 +42,12 @@ export const DeletePost = ({ postId }) => {
 
     return (
         <Fragment>
-            <MyButton
-                tipTitle="Delete Post"
-                onClick={handleOpen}
-                btnClassName={classes.deleteButton}
-                tipClassName={classes.tooltip}
-            >
-                <DeleteOutlineIcon color="secondary"/>
-            </MyButton>
+
+            <Tooltip title="Delete Post" className={classes.tooltip}>
+                <IconButton onClick={handleOpen} className={classes.deleteButton}>
+                    <DeleteOutlineIcon color="secondary" />
+                </IconButton>
+            </Tooltip>
 
             <Dialog open={open} onClose={handleClose} aria-labelledby="" fullWidth maxWidth="sm">
                 <DialogTitle>Are you sure you want to delete the scream ?</DialogTitle>

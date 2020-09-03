@@ -15,6 +15,7 @@ import EditIcon from '@material-ui/icons/Edit';
 import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
 import { getUser, changeProfilePic, logout } from '../../redux/actions/userActions';
 import { useGoogleLogout } from 'react-google-login';
+import { clientId } from '../../utils/utils';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
@@ -30,8 +31,6 @@ export const UserProfile = ({ user }) => {
 
     const [isUserOwnProfile, setIsUserOwnProfile] = useState(false);
     const inputFile = useRef();
-
-    const clientId = process.env.REACT_APP_CLIENT_ID;
 
     const onGoogleLogoutSuccess = () => dispatch(logout());
 

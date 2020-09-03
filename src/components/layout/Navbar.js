@@ -22,7 +22,7 @@ export const Navbar = () => {
     const { authenticated } = useSelector(state => state.user);
 
     return (
-        <AppBar position="sticky">
+        <AppBar position="sticky" className={classes.appbar}>
             <Toolbar className="nav-container">
                 {authenticated
                     ?

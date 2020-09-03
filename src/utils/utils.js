@@ -1,8 +1,8 @@
-
-
-const serverUri = process.env.REACT_APP_SERVER_URI;
+const serverUri = 'https://react-social-app-server.herokuapp.com';
 
 export const url = `${serverUri}/api`;
+
+export const clientId = '337218875190-1fch0gemblkajnmbmtfg89u764mjrleh.apps.googleusercontent.com';
 
 export const appTheme = {
     palette: {

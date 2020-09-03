@@ -4,14 +4,13 @@ import { useDispatch } from 'react-redux';
 import * as fromTYPES from '../../redux/types';
 import { useHistory } from 'react-router-dom';
 import { googleLogin } from '../../redux/actions/userActions';
+import { clientId } from '../../utils/utils';
 
 export const GoogleButton = () => {
 
     const dispatch = useDispatch();
 
     const history = useHistory();
-
-    const clientId = process.env.REACT_APP_CLIENT_ID;
 
     const onGoogleLoginsSuccess = ({ tokenId }) => {
         dispatch(googleLogin(tokenId, history));
