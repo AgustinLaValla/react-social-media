@@ -18,7 +18,7 @@ export const Comments = ({ comments, postId, userId }) => {
         <Grid container className={classes.commentsContainer}>
             <CommentForm {...{ postId, userId }} />
             {comments.map((comment, index) => (
-                <Grid container spacing="4">
+                <Grid key={comment._id} container spacing={4}>
                     <Grid item sm={2}>
                         <img src={getUserImage(comment.userId)} className={classes.commentImage} />
                     </Grid>

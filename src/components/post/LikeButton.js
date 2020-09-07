@@ -53,6 +53,7 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
         if (authenticated) {
             setPostLiked(post.likes.find(like => like.userId._id === userData._id));
         }
+        return () => null;
     }, [post]);
 
     return (
@@ -66,12 +67,12 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
 
                 : postLiked
                     ?
-                    <MyButton tipTitle="Undo like" tipClassName={classes.tooltip}>
-                        <FavoriteIcon color="primary" onClick={unLike} />
+                    <MyButton tipTitle="Undo like" tipClassName={classes.tooltip} onClick={unLike}>
+                        <FavoriteIcon color="primary" />
                     </MyButton>
                     :
-                    <MyButton tipTitle="Like" tipClassName={classes.tooltip}>
-                        <FavoriteBorderIcon color="primary" onClick={addLike} />
+                    <MyButton tipTitle="Like" tipClassName={classes.tooltip} onClick={addLike} >
+                        <FavoriteBorderIcon color="primary"/>
                     </MyButton>
             }
             <span>{post.likeCount}</span>

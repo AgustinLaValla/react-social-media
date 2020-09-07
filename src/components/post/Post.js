@@ -64,6 +64,7 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
         if (openDialog) {
             setOpenPostDialog(true)
         }
+        return () => null;
     }, [openDialog])
 
     return (

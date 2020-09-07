@@ -135,7 +135,7 @@ const Signup = () => {
             </Grid>
 
             <ErrorMessageDialog
-                open={openErrorsDialog}
+                open={openErrorsDialog || false}
                 message={error}
                 onClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                 closeDialog={() => dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: false })}

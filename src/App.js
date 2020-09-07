@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import './index.css';
 //router
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 //components
 import { Home } from './pages/Home';
 import Login from './pages/Login';
@@ -53,6 +53,7 @@ function App() {
       const socket = socketIOClient(`${serverUrl}`);
       dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: socket });
     }
+    return () => null;
   }, [authenticated]);
 
   return (
@@ -67,6 +68,7 @@ function App() {
               <Route exact path='/signup' component={Signup}  />
               <AuthRoute exact path="/user/:id" component={User} authenticated={authenticated}/>
               <AuthRoute exact path="/user/:id/post/:postId" component={User} authenticated={authenticated}/>
+              <Redirect to="/"/>
             </div>
           </Switch>
         </ThemeProvider>

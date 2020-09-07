@@ -66,8 +66,7 @@ export const Notifications = () => {
                         <Typography
                             component={Link}
                             to={`/user/${_id}/post/${notification.postId}`}
-                            color="default"
-                            variant="body"
+                            variant="body1"
                         >
                             {notification.username} {verb} your screen {time}
                         </Typography>
@@ -98,6 +97,7 @@ export const Notifications = () => {
         } else {
             setNotificationIcon(<NotificationsIcon />);
         }
+        return () => null;
     }, [postNotifications])
 
     return (

@@ -62,10 +62,13 @@ export const refreshUserData = (id) => async dispatch => {
     }
 }
 
-export const logout = () => async dispatch => {
+export const logout = (googleSignout) => async dispatch => {
     dispatch({ type: fromTYPES.SET_UNAUTHENTICATED });
     Cookie.remove('token');
     localStorage.clear();
+    if(googleSignout) {
+        setTimeout(() => googleSignout() , 3500);
+    }
 }
 
 export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUserProfile = false) => async dispatch => {

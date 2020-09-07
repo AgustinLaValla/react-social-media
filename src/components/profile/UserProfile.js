@@ -32,14 +32,9 @@ export const UserProfile = ({ user }) => {
     const [isUserOwnProfile, setIsUserOwnProfile] = useState(false);
     const inputFile = useRef();
 
-    const onGoogleLogoutSuccess = () => dispatch(logout());
+    const { signOut } = useGoogleLogout({ clientId });
 
-    const { signOut } = useGoogleLogout({
-        onLogoutSuccess: onGoogleLogoutSuccess,
-        clientId
-    });
-
-    const handleLogout = () => userData.google ? signOut() : dispatch(logout());
+    const handleLogout = () => userData.google ? dispatch(logout(signOut)) : dispatch(logout());
 
     const handleInputFileChange = (imageFile) => {
         const reader = new FileReader();
@@ -54,6 +49,7 @@ export const UserProfile = ({ user }) => {
         } else {
             setIsUserOwnProfile(false);
         }
+        return () => null;
     }, [userData, user]);
 
 
@@ -61,7 +57,9 @@ export const UserProfile = ({ user }) => {
         if (socket && isUserOwnProfile) {
             socket.on('refresh_visited_userData', () => dispatch(getUser(user._id)));
         }
-        return () => socket ? socket.removeListener('refresh_visited_userData', () => dispatch(getUser(user._id))) : null;
+        return () => socket ?
+            socket.removeListener('refresh_visited_userData', () => dispatch(getUser(user._id)))
+            : null;
 
     }, [socket, isUserOwnProfile, user]);
 
@@ -136,11 +134,8 @@ export const UserProfile = ({ user }) => {
                     <br />
                     {isUserOwnProfile &&
                         <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
-                            <IconButton >
-                                <EditIcon
-                                    onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}
-                                    color="primary"
-                                />
+                            <IconButton onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}>
+                                <EditIcon color="primary" />
                             </IconButton>
                         </Tooltip>
                     }
@@ -155,8 +150,8 @@ export const UserProfile = ({ user }) => {
                     {isUserOwnProfile &&
                         <Fragment>
                             <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
-                                <IconButton >
-                                    <ExitToAppIcon fontSize="large" onClick={handleLogout} color="primary" />
+                                <IconButton onClick={handleLogout} color="primary">
+                                    <ExitToAppIcon fontSize="large" />
                                 </IconButton>
                             </Tooltip>
                             <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
@@ -167,7 +162,7 @@ export const UserProfile = ({ user }) => {
             {isUserOwnProfile &&
                 <Fragment>
                     <EditDetails
-                        open={openEditUserDetailsDialog}
+                        open={openEditUserDetailsDialog || false}
                         handleClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                         bio={userData.bio ? userData.bio : null}
                         location={userData.location ? userData.location : null}
@@ -178,7 +173,7 @@ export const UserProfile = ({ user }) => {
                         fromVisitedUser={true}
                     />
                     <ErrorMessageDialog
-                        open={openErrorsDialog}
+                        open={openErrorsDialog || false}
                         message={error}
                         onClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                         closeDialog={() => dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: false })}

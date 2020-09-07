@@ -16,7 +16,6 @@ const useStyles = makeStyles(theme => getStyles(theme));
 export const PostDialog = ({ open, handleClose, post, userData, socket }) => {
 
     const classes = useStyles();
-    const dispatch = useDispatch();
 
     return (
         <Dialog open={open} onClose={handleClose} aria-labelledby="" className={classes.dialog} fullWidth>
@@ -25,7 +24,7 @@ export const PostDialog = ({ open, handleClose, post, userData, socket }) => {
 
             <DialogTitle id=""></DialogTitle>
             <DialogContent className={classes.DialogContent}>
-                <Grid container spacing="16">
+                <Grid container>
                     <Grid item sm={5}>
                         <img
                             src={getUserImage(post.userId)}

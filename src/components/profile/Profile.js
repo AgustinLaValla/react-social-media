@@ -26,18 +26,13 @@ const useStyles = makeStyles(theme => getStyles(theme));
 export const Profile = () => {
 
     const classes = useStyles();
-    const { userData, authenticated ,error } = useSelector(state => state.user);
+    const { userData, authenticated, error } = useSelector(state => state.user);
     const { loading, openEditUserDetailsDialog, openErrorsDialog } = useSelector(state => state.ui);
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
     const inputFile = useRef();
 
-    const onGoogleLogoutSuccess = () => dispatch(logout());
-
-    const { signOut } = useGoogleLogout({
-        onLogoutSuccess: onGoogleLogoutSuccess,
-        clientId
-    });
+    const { signOut } = useGoogleLogout({ clientId });
 
     const uploadImage = async (image) => {
         const token = Cookie.getJSON('token');
@@ -57,12 +52,15 @@ export const Profile = () => {
         reader.onloadend = () => uploadImage(reader.result);
     };
 
-    const handleLogout = () => userData.google ? signOut() : dispatch(logout());
+    const handleLogout = () => userData.google ? dispatch(logout(signOut)) : dispatch(logout());
 
     useEffect(() => {
         if (socket) {
             socket.on('refresh_userData', () => dispatch(refreshUserData(userData._id)));
         }
+        return () => socket
+            ? socket.removeListener('refresh_userData', () => dispatch(refreshUserData(userData._id)))
+            : null
     }, [socket]);
 
 
@@ -108,7 +106,7 @@ export const Profile = () => {
                                     <LocationOn color="primary" /> <span>{userData.location}</span>
                                 </Fragment>
                             }
-                            <br/>
+                            <br />
                             {userData.website &&
                                 <Fragment>
                                     <LinkIcon color="primary" />
@@ -126,11 +124,8 @@ export const Profile = () => {
                             <span>Joined from {dayjs(userData.createdAt).format('MMM-YYYY')}</span>
                             <br />
                             <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
-                                <IconButton >
-                                    <EditIcon
-                                        onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}
-                                        color="primary"
-                                    />
+                                <IconButton onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}>
+                                    <EditIcon color="primary" />
                                 </IconButton>
                             </Tooltip>
                             <span
@@ -140,8 +135,8 @@ export const Profile = () => {
                                 Edit my details</span>
                             <br />
                             <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
-                                <IconButton >
-                                    <ExitToAppIcon fontSize="large" onClick={handleLogout} color="primary" />
+                                <IconButton onClick={handleLogout}>
+                                    <ExitToAppIcon fontSize="large" color="primary" />
                                 </IconButton>
                             </Tooltip>
                             <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
@@ -162,7 +157,7 @@ export const Profile = () => {
             }
             {authenticated &&
                 <EditDetails
-                    open={openEditUserDetailsDialog}
+                    open={openEditUserDetailsDialog || false}
                     handleClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                     bio={userData.bio ? userData.bio : null}
                     location={userData.location ? userData.location : null}
@@ -172,7 +167,7 @@ export const Profile = () => {
                     socket={socket}
                 />}
             <ErrorMessageDialog
-                open={openErrorsDialog}
+                open={openErrorsDialog || false}
                 message={error}
                 onClose={() => dispatch({ type: fromTYPES.CLEAR_USER_ERRORS })}
                 closeDialog={() => dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: false })}

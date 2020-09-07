@@ -6,7 +6,6 @@ import { useSelector } from 'react-redux';
 import MyButton from './MyButton';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import { AddPost } from '../post/AddPost';
 import { Notifications } from './Notifications';
 
@@ -14,7 +13,7 @@ const useStyles = makeStyles(theme => getStyles(theme));
 
 export const Navbar = () => {
 
-    const [openAddPostDialog, setOpenAddPostDialog] = useState()
+    const [openAddPostDialog, setOpenAddPostDialog] = useState(false);
 
     const classes = useStyles();
 
@@ -36,16 +35,16 @@ export const Navbar = () => {
                             <AddIcon color="primary" />
                         </MyButton>
 
-                        <Link>
 
-                            <Tooltip title="Home" className={classes.tooltip}>
-                                <IconButton  component={Link} to='/'>
-                                    <HomeIcon color="primary" />
-                                </IconButton>
-                            </Tooltip>
-                        </Link>
 
-                        <Notifications/>
+                        <Tooltip title="Home" className={classes.tooltip}>
+                            <IconButton component={Link} to='/'>
+                                <HomeIcon color="primary" />
+                            </IconButton>
+                        </Tooltip>
+
+
+                        <Notifications />
 
                     </Fragment>
                     :

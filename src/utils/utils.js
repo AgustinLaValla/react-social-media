@@ -1,3 +1,8 @@
+import jwtDecode from 'jwt-decode';
+import Cookie from 'js-cookie';
+import { logout } from '../redux/actions/userActions';
+import axios from 'axios';
+
 const serverUri = 'https://react-social-app-server.herokuapp.com';
 
 export const url = `${serverUri}/api`;
@@ -31,7 +36,7 @@ export const getHeaders = (token) => ({
 export const getImageUrl = (picVersion, picId) => `https://res.cloudinary.com/dnfm4fq8d/image/upload/v${picVersion}/${picId}`;
 export const getUserImage = (userData) => {
 
-    if(!userData) {
+    if (!userData) {
         return;
     }
 
@@ -46,3 +51,25 @@ export const getUserImage = (userData) => {
 
 export const saveUserData = (userData) => localStorage.setItem('userData', JSON.stringify(userData));
 export const getUserData = () => JSON.parse(localStorage.getItem('userData'));
+
+
+export const renovateToken = (history, dispatch, signOut) => {
+    const token = Cookie.getJSON('token');
+    if (token) {
+        const decodedToken = jwtDecode(token);
+        if (expired(decodedToken.exp)) {
+            history.push('/login');
+            dispatch(logout(signOut));
+        } else {
+            axios.get(`${url}/auth/renovate-token`, getHeaders(token))
+                .then(({ data }) => Cookie.set('token', data.token))
+                .catch(console.log)
+        }
+    }
+}
+
+const expired = (expDate) => {
+    const currentDate = new Date().getTime() / 1000;
+    console.log({ tokenExp: expDate, currentDate: currentDate });
+    return expDate < currentDate;
+}
