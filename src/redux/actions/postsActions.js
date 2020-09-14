@@ -40,19 +40,23 @@ export const addPost = (post, token, socket) => async dispatch => {
     try {
         await axios.post(`${url}/posts/add-post`, post, getHeaders(token));
         socket.emit('refresh_posts');
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
         dispatch({ type: fromTYPES.GET_POSTS_FAILED, payload: error.response.data.message });
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     }
 };
 
-export const addComment = (postId, userId, comment, socket) => async dispatch => {
+export const addComment = (postId, userId, comment, socket, fromVisitedUser, userProfileRoom) => async dispatch => {
     dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     try {
         const token = Cookie.getJSON('token');
-        axios.put(`${url}/posts/add-comment/${postId}/${userId}`, { comment }, getHeaders(token));
-        socket.emit('refresh_single_post');
-        socket.emit('refresh_userData');
+        await axios.put(`${url}/posts/add-comment/${postId}/${userId}`, { comment }, getHeaders(token));
+        await socket.emit('refresh_single_post', { postId });
+        socket.emit('refresh_userData', { visitedUserId: userId });
+        if (fromVisitedUser) {
+            socket.emit('refresh_userVisited_post', { postId, userProfileRoom });
+        }
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
         dispatch({ type: fromTYPES.GET_POSTS_FAILED, payload: error.response.data.message });

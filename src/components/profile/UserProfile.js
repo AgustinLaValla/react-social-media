@@ -49,7 +49,7 @@ export const UserProfile = ({ user }) => {
         } else {
             setIsUserOwnProfile(false);
         }
-        return () => null;
+        // return () => dispatch({type:fromTYPES.CLEAR_VISITED_USER_DATA});
     }, [userData, user]);
 
 

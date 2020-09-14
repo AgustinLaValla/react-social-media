@@ -6,6 +6,15 @@ export const getStyles = (theme) => ({
     paper: {
         padding: 20
     },
+    notificationsMenu:{
+        [theme.breakpoints.down('sm')]: {
+            maxWidth:'80%'
+        }
+    },
+    notifications_menuItem: {
+        fontSize:'12px',
+        hyphens: 'auto'
+    },
     profile: {
         '& .image-wrapper': {
             textAlign: 'center',
@@ -98,17 +107,27 @@ export const getStyles = (theme) => ({
         [theme.breakpoints.up('md')]: {
             position: 'absolute',
             left: '90%',
-            top: '13%',
+            top: '8%',
         }
     },
     expandButton: {
         position: 'absolute',
         left: '90%',
-        bottom: '13%',
+        bottom: '12%',
         [theme.breakpoints.down('sm')]: {
             position: 'absolute',
-            bottom: '8%',
+            bottom: '7%',
             left: '80%',
+        }
+    },
+    openChatButton: {
+        position: 'absolute',
+        left: '85%',
+        bottom: '12%',
+        [theme.breakpoints.down('sm')]: {
+            position: 'absolute',
+            bottom: '7%',
+            left: '70%',
         }
     },
     addPostBtn: {
@@ -152,6 +171,46 @@ export const getStyles = (theme) => ({
     },
     postCommentFormContainer: {
         marginTop: '25px'
-    }
-
+    },
+    chatPaper: {
+        position: 'absolute',
+        width: '400px',
+        height: '550px',
+        backgroundColor: theme.palette.background.paper,
+        border: 'none',
+        outline: 'none',
+        boxShadow: theme.shadows[5],
+        [theme.breakpoints.down('xs')]: {
+            width: '100%',
+            height: '100vh'
+        }
+    },
+    chatPaperFullScreen: {
+        position: 'absolute',
+        width: '100%',
+        height: '100vh',
+        backgroundColor: theme.palette.background.paper,
+        border: 'none',
+        outline: 'none',
+        boxShadow: theme.shadows[5],
+    },
+    chatContent: {
+        overflowY: 'auto'
+    },
+    chatFooter: {
+        bottom: '0'
+    },
+    chatText: {
+        display: 'flex'
+    },
+    senderChatBubblePaper: {
+        padding: '10px',
+        color: 'white',
+        backgroundColor: '#486b00',
+        maxWidth: '280px'
+    },
+    receiverChatBubblePaper: {
+        padding: '10px',
+        maxWidth: '280px'
+    },
 })

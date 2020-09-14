@@ -13,7 +13,7 @@ import { Comments } from './Comments';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const PostDialog = ({ open, handleClose, post, userData, socket }) => {
+export const PostDialog = ({ open, handleClose, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
 
     const classes = useStyles();
 
@@ -60,8 +60,14 @@ export const PostDialog = ({ open, handleClose, post, userData, socket }) => {
                         <span>{post.commentCount}</span>
                     </Grid>
 
-                   
-                    <Comments comments={post.comments} postId={post._id} userId={post.userId._id}/>
+
+                    <Comments
+                        comments={post.comments}
+                        postId={post._id}
+                        userId={post.userId._id}
+                        fromVisitedUser={fromVisitedUser}
+                        userProfileRoom={userProfileRoom}
+                    />
                 </Grid>
             </DialogContent>
             <DialogActions>

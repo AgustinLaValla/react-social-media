@@ -17,7 +17,7 @@ import { getStyles } from '../../utils/styles';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 //redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 //react-router
 import { Link } from 'react-router-dom';
 //Cookie
@@ -29,7 +29,7 @@ import { url, getHeaders } from '../../utils/utils';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Notifications = () => {
+export const Notifications = ({userId}) => {
 
     const classes = useStyles();
 
@@ -46,7 +46,7 @@ export const Notifications = () => {
     const markNotification = (notificationId) => {
         const token = Cookie.getJSON('token');
         axios.put(`${url}/user/mark-notification-as-read/${notificationId}`, {}, getHeaders(token))
-            .then(() => socket ? socket.emit('refresh_userData') : null)
+            .then(() => socket ? socket.emit('refresh_userData', { currentUserId: userId }) : null)
             .catch(console.log)
     };
 
@@ -58,7 +58,7 @@ export const Notifications = () => {
                 const iconColor = notification.read ? 'primary' : 'secondary';
 
                 return (
-                    <MenuItem key={notification.createdAt} onClick={() => markNotification(notification._id)}>
+                    <MenuItem key={notification._id} onClick={() => markNotification(notification._id)}>
                         {notification.type === 'like'
                             ? <FavoriteIcon color={iconColor} style={{ marginRight: 10 }} />
                             : <ChatIcon color={iconColor} style={{ marginRight: 10 }} />
@@ -67,6 +67,7 @@ export const Notifications = () => {
                             component={Link}
                             to={`/user/${_id}/post/${notification.postId}`}
                             variant="body1"
+                            className={classes.notifications_menuItem}
                         >
                             {notification.username} {verb} your screen {time}
                         </Typography>
@@ -112,6 +113,7 @@ export const Notifications = () => {
                 anchorEl={anchorEl}
                 open={Boolean(anchorEl)}
                 onClose={handleClose}
+                classes={classes.notificationsMenu}
             >
                 {getNotificationsMarkup()}
             </Menu>

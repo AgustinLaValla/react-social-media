@@ -8,6 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { Navbar } from './components/layout/Navbar';
 import { User } from './pages/User';
+import Users from './components/users/Users';
 //protected route component
 import AuthRoute from './utils/AuthRoute';
 //material-ui
@@ -25,36 +26,74 @@ import { useSelector, useDispatch } from 'react-redux';
 import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT } from './redux/types';
 //socket
 import socketIOClient from "socket.io-client";
+import { refreshSinglePost, refreshVisitedUserPost } from './redux/actions/postsActions';
+
 
 const theme = createMuiTheme(appTheme);
 
-const token = Cookie.get('token');
-
-if (token) {
-  const decodedToken = jwtDecode(token);
-  if (decodedToken.exp * 100 < Date.now()) {
-    const userData = getUserData(); 
-    store.dispatch({ type: SET_AUTHENTICATED, payload: userData })
-  } else {
-    store.dispatch({ type: SET_UNAUTHENTICATED });
-  }
-}
-
 function App() {
-  
-  const { authenticated } = useSelector(state => state.user);
+
+  const { authenticated, userData } = useSelector(state => state.user);
+  const { socket } = useSelector(state => state.socket);
 
   const dispatch = useDispatch();
 
   const serverUrl = process.env.REACT_APP_SERVER_URI;
 
   useEffect(() => {
-    if (authenticated) {
-      const socket = socketIOClient(`${serverUrl}`);
-      dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: socket });
+    const token = Cookie.get('token');
+
+    if (token) {
+      const decodedToken = jwtDecode(token);
+      if (decodedToken.exp * 100 < Date.now()) {
+        const userData = getUserData();
+        store.dispatch({ type: SET_AUTHENTICATED, payload: userData });
+      } else {
+        store.dispatch({ type: SET_UNAUTHENTICATED });
+      }
     }
-    return () => null;
+    return () => {};
+  }, [])
+
+
+  useEffect(() => {
+    if (authenticated) {
+      const newSocket = socketIOClient(serverUrl);
+      dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: newSocket });
+      newSocket.emit('online', { username: userData.username, userId: userData._id });
+      newSocket.emit('set_private_room', { userId: userData._id });
+      newSocket.emit('refresh_userData', { currentUserId: userData._id });
+    }
+
+    if (!authenticated && (socket !== null && socket !== undefined)) {
+      socket.emit('logout');
+      socket.off();
+    }
+
+    return () => {
+      if (socket) {
+        socket.emit('disconnect');
+        socket.off();
+      }
+    };
   }, [authenticated]);
+
+  useEffect(() => {
+    if (socket) {
+      socket.on('refresh_single_post', ({ postId }) => {
+        dispatch(refreshSinglePost(postId));
+        console.log('Post refreshed');
+      });
+      socket.on('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)));
+    }
+    return () => {
+      if (socket) {
+        socket.removeListener('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)))
+        socket.removeListener('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)))
+      }
+    }
+  }, [socket]);
+
 
   return (
     <div className="App">
@@ -64,11 +103,12 @@ function App() {
           <Switch>
             <div className="container">
               <Route exact path='/' component={Home} />
-              <Route exact path='/login' component={Login}  />
-              <Route exact path='/signup' component={Signup}  />
-              <AuthRoute exact path="/user/:id" component={User} authenticated={authenticated}/>
-              <AuthRoute exact path="/user/:id/post/:postId" component={User} authenticated={authenticated}/>
-              <Redirect to="/"/>
+              <Route exact path='/login' component={Login} />
+              <Route exact path='/signup' component={Signup} />
+              <Route exact path="/users" component={Users}/>
+              <AuthRoute exact path="/user/:id" component={User} authenticated={authenticated} />
+              <AuthRoute exact path="/user/:id/post/:postId" component={User} authenticated={authenticated} />
+              <Redirect to="/" />
             </div>
           </Switch>
         </ThemeProvider>

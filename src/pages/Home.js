@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Grid } from '@material-ui/core';
 import { Post } from '../components/post/Post';
 import Cookie from 'js-cookie';
@@ -9,13 +9,17 @@ import { useHistory } from 'react-router-dom';
 import { renovateToken } from '../utils/utils';
 import { useGoogleLogout } from 'react-google-login';
 import { clientId } from '../utils/utils';
+import ChatModal from '../components/chat/ChatModal';
+import { OPEN_CHAT_MODAL, CLEAR_MESSAGES, CLEAR_VISITED_USER_DATA, CLEAR_CHAT_USER_DATA } from '../redux/types';
 
 export const Home = () => {
 
     const posts = useSelector(state => state.posts.posts);
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
-    const { userData } = useSelector(state => state.user);
+    const { userData, authenticated, chatUserData } = useSelector(state => state.user);
+    const { openChatModal } = useSelector(state => state.ui);
+    const [connectedUsers, setConnectedUsers] = useState([]); 
 
     const history = useHistory();
 
@@ -25,6 +29,12 @@ export const Home = () => {
         const token = Cookie.getJSON('token');
         dispatch(getPosts(token));
     }
+
+    const onCloseChatModal = () => {
+        dispatch({type: OPEN_CHAT_MODAL, payload:false});
+        dispatch({ type: CLEAR_MESSAGES });
+        dispatch({ type: CLEAR_CHAT_USER_DATA });
+    };
 
     useEffect(() => {
         getPostsList();
@@ -49,6 +59,16 @@ export const Home = () => {
         return () => null;
     }, []);
 
+    useEffect(() => {
+        if(authenticated && socket) {
+          socket.on('usersOnline', ({onlineUsers}) => setConnectedUsers(onlineUsers));
+        }
+        return () => socket
+            ? socket.removeListener('usersOnline', ({onlineUsers}) => setConnectedUsers(onlineUsers))
+            : null
+      }, [authenticated, socket]);
+
+
     return (
         <Grid container spacing={2}>
             <Grid item md={8} xs={12} className="animated fadeIn">
@@ -57,6 +77,16 @@ export const Home = () => {
                         <Post key={post._id} post={post} />
                     )
                     : null
+                }
+                {
+                    authenticated && chatUserData &&
+                    <ChatModal
+                        open={openChatModal}
+                        handleClose={onCloseChatModal}
+                        user={chatUserData}
+                        currentUser={userData}
+                        socket={socket}
+                    />
                 }
             </Grid>
             <Grid item md={4} xs={12} className="animated fadeIn">

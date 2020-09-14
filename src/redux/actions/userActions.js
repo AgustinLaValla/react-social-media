@@ -25,7 +25,7 @@ export const googleLogin = (token, history) => async dispatch => {
         const { data } = await axios.post(`${url}/auth/google`, { token });
         Cookie.set('token', JSON.stringify(data.token));
         saveUserData(data.user);
-        dispatch({type:fromTYPES.SET_AUTHENTICATED, payload:data.user});
+        dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
         history.push('/');
     } catch (error) {
         dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error.response.data.message });
@@ -66,8 +66,8 @@ export const logout = (googleSignout) => async dispatch => {
     dispatch({ type: fromTYPES.SET_UNAUTHENTICATED });
     Cookie.remove('token');
     localStorage.clear();
-    if(googleSignout) {
-        setTimeout(() => googleSignout() , 3500);
+    if (googleSignout) {
+        setTimeout(() => googleSignout(), 3500);
     }
 }
 
@@ -89,14 +89,21 @@ export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUs
     }
 }
 
-export const getUser = (userId) => async dispatch => {
+export const getUser = (userId, chatUser = false) => async dispatch => {
     dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     const token = Cookie.getJSON('token');
     try {
         const { data } = await axios.get(`${url}/user/${userId}`, getHeaders(token));
-        dispatch({ type: fromTYPES.SET_VISITED_USER, payload: data.user })
+        if (!chatUser) {
+            dispatch({ type: fromTYPES.SET_VISITED_USER, payload: data.user });
+        } else {
+            dispatch({type: fromTYPES.SET_CHAT_USER_DATA, payload: data.user});
+        }
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
+
     } catch (error) {
-        dispatch({ type: fromTYPES.SET_VISITED_USER_ERRORS, payload: error.response.data.message })
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
+        dispatch({ type: fromTYPES.SET_VISITED_USER_ERRORS, payload: error?.response?.data?.message })
     }
 };
 

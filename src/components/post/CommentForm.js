@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const CommentForm = ({postId, userId}) => {
+export const CommentForm = ({postId, userId, fromVisitedUser, userProfileRoom}) => {
 
     const classes = useStyles();
 
@@ -22,7 +22,7 @@ export const CommentForm = ({postId, userId}) => {
 
     const submitHandler = (ev) => {
         ev.preventDefault();
-        dispatch(addComment(postId, userId, comment, socket));
+        dispatch(addComment(postId, userId, comment, socket, fromVisitedUser, userProfileRoom));
     }
 
     return authenticated && (

@@ -7,6 +7,8 @@ const serverUri = 'https://react-social-app-server.herokuapp.com';
 
 export const url = `${serverUri}/api`;
 
+// export const url = `http://localhost:4000/api`;
+
 export const clientId = '337218875190-1fch0gemblkajnmbmtfg89u764mjrleh.apps.googleusercontent.com';
 
 export const appTheme = {
@@ -70,6 +72,5 @@ export const renovateToken = (history, dispatch, signOut) => {
 
 const expired = (expDate) => {
     const currentDate = new Date().getTime() / 1000;
-    console.log({ tokenExp: expDate, currentDate: currentDate });
     return expDate < currentDate;
 }

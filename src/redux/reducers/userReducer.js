@@ -4,6 +4,7 @@ const initialState = {
     authenticated: false,
     userData: null,
     visitedUserData: null,
+    chatUserData:null,
     loading: false,
     error: null
 }
@@ -63,6 +64,25 @@ export function userReducer(state = initialState, action) {
                         notification._id === action.payload ? { ...notification, read: true } : notification
                     )
                 }
+            }
+
+        case fromTYPES.CLEAR_VISITED_USER_DATA:
+            return {
+                ...state,
+                visitedUserData: null
+            }
+
+
+        case fromTYPES.SET_CHAT_USER_DATA:
+            return {
+                ...state,
+                chatUserData: { ...action.payload }
+            }
+
+        case fromTYPES.CLEAR_CHAT_USER_DATA:
+            return {
+                ...state,
+                chatUserData: null
             }
 
         default: return state;

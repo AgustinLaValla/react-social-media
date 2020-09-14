@@ -9,7 +9,7 @@ import MyButton from '../layout/MyButton';
 import { useDispatch } from 'react-redux';
 import * as fromTYPES from '../../redux/types';
 
-export const LikeButton = ({ authenticated, classes, post, userData, socket, fromVisitedUser }) => {
+export const LikeButton = ({ authenticated, classes, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
 
     const [postLiked, setPostLiked] = useState(false);
     const dispatch = useDispatch();
@@ -20,10 +20,10 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
         try {
             const token = Cookie.getJSON('token');
             await axios.put(`${url}/posts/add-like/${post._id}/${post.userId._id}`, {}, getHeaders(token));
-            socket.emit('refresh_single_post');
-            socket.emit('refresh_userData');
+            socket.emit('refresh_single_post', { postId:post._id });
+            socket.emit('refresh_userData', { visitedUserId: post.userId._id });
             if (fromVisitedUser) {
-                socket.emit('refresh_userVisited_post');
+                socket.emit('refresh_userVisited_post', { postId:post._id, userProfileRoom });
             }
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         } catch (error) {
@@ -37,9 +37,9 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
         try {
             const token = Cookie.getJSON('token');
             await axios.put(`${url}/posts/unlike/${post._id}/${post.userId._id}`, {}, getHeaders(token));
-            socket.emit('refresh_single_post');
+            socket.emit('refresh_single_post', { postId: post._id });
             if (fromVisitedUser) {
-                socket.emit('refresh_userVisited_post');
+                socket.emit('refresh_userVisited_post', { postId: post._id, userProfileRoom });
             }
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         } catch (error) {

@@ -3,6 +3,9 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import ChatIcon from '@material-ui/icons/Chat';
+import UnfoldMore from '@material-ui/icons/UnfoldMore';
+import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import { makeStyles } from '@material-ui/core';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
@@ -10,17 +13,17 @@ import { getUserImage } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
 import { refreshSinglePost, refreshVisitedUserPost } from '../../redux/actions/postsActions';
 import MyButton from '../layout/MyButton';
-import ChatIcon from '@material-ui/icons/Chat';
 import { DeletePost } from './DeletePost';
 import { getStyles } from '../../utils/styles';
-import UnfoldMore from '@material-ui/icons/UnfoldMore';
 import { PostDialog } from './PostDialog';
 import { LikeButton } from './LikeButton';
 import { Link, useHistory } from 'react-router-dom';
+import { getUser } from '../../redux/actions/userActions';
+import { OPEN_CHAT_MODAL } from '../../redux/types';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Post = ({ post, openDialog, fromVisitedUser }) => {
+export const Post = ({ post, openDialog, fromVisitedUser, userProfileRoom }) => {
 
     const classes = useStyles();
     const { socket } = useSelector(state => state.socket);
@@ -33,32 +36,25 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
     const dispatch = useDispatch();
 
     const handleOpenPostDialog = () => {
-        if(authenticated) {
+        if (authenticated) {
             setOpenPostDialog(true);
         } else {
             history.push('/login');
         }
     }
 
+    const openChat = (userId) => {
+        if (authenticated) {
+            dispatch(getUser(userId, true));
+            dispatch({ type: OPEN_CHAT_MODAL, payload: true });
+        } else {
+            history.push('/login');
+        }
+    };
+
+
     dayjs.extend(relativeTime);
 
-    useEffect(() => {
-        if (socket) {
-            socket.on('refresh_single_post', () => dispatch(refreshSinglePost(post._id)));
-        }
-        return () => socket
-            ? socket.removeListener('refresh_single_post', () => dispatch(refreshSinglePost(post._id)))
-            : null;
-    }, [socket]);
-
-    useEffect(() => {
-        if (socket && fromVisitedUser) {
-            socket.on('refresh_userVisited_post', () => dispatch(refreshVisitedUserPost(post._id)))
-        }
-        return () => socket
-            ? socket.removeListener('refresh_userVisited_post', () => dispatch(refreshVisitedUserPost(post._id)))
-            : null
-    }, [socket, fromVisitedUser])
 
     useEffect(() => {
         if (openDialog) {
@@ -85,7 +81,7 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
                 }
 
                 {/* Like button */}
-                <LikeButton {...{ authenticated, classes, post, userData, fromVisitedUser }} socket={socket} />
+                <LikeButton {...{ authenticated, classes, post, userData, fromVisitedUser, userProfileRoom }} socket={socket} />
 
                 <MyButton tipTitle="comments" tipClassName={classes.tooltip} onClick={handleOpenPostDialog}>
                     <ChatIcon color="primary" />
@@ -101,13 +97,25 @@ export const Post = ({ post, openDialog, fromVisitedUser }) => {
                     <UnfoldMore color="primary" />
                 </MyButton>
 
+                <MyButton
+                    onClick={() => openChat(post.userId._id)}
+                    tipTitle={`Chat with ${post.userId.username}`}
+                    btnClassName={classes.openChatButton}
+                    tipClassName={classes.tooltip}
+                >
+                    <QuestionAnswerIcon color="primary" />
+                </MyButton>
+
                 <PostDialog
                     open={openPostDialog}
                     handleClose={() => setOpenPostDialog(false)}
                     post={post}
                     userData={userData}
                     socket={socket}
+                    fromVisitedUser={fromVisitedUser}
+                    userProfileRoom={userProfileRoom}
                 />
+
             </CardContent>
         </Card>
     )

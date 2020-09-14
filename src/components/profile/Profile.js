@@ -39,7 +39,7 @@ export const Profile = () => {
         dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
         try {
             await axios.put(`${url}/images/change-profile-image`, { image }, getHeaders(token));
-            socket.emit('refresh_userData');
+            socket.emit('refresh_userData', { currentUserId: userData._id });
 
         } catch (error) {
             console.log(error);
@@ -52,7 +52,10 @@ export const Profile = () => {
         reader.onloadend = () => uploadImage(reader.result);
     };
 
-    const handleLogout = () => userData.google ? dispatch(logout(signOut)) : dispatch(logout());
+    const handleLogout = async () => {
+        await socket.emit('leave_private_room', { userId: userData._id });
+        await userData.google ? dispatch(logout(signOut)) : dispatch(logout())
+    };
 
     useEffect(() => {
         if (socket) {

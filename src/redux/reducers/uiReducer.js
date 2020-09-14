@@ -4,7 +4,8 @@ const initialState = {
     loading: false,
     activateLinearProgress: false,
     openErrorsDialog: false,
-    openEditUserDetailsDialog:false
+    openEditUserDetailsDialog:false,
+    openChatModal: false
 }
 
 export const uiReducer = (state = initialState, action) => {
@@ -39,7 +40,13 @@ export const uiReducer = (state = initialState, action) => {
                 openEditUserDetailsDialog: action.payload
             }
 
+        case fromTYPES.OPEN_CHAT_MODAL:
+            return {
+                ...state,
+                openChatModal: action.payload
+            }
+
         default:
-            return false;
+            return state;
     }
 }

@@ -4,14 +4,18 @@ import { userReducer } from './reducers/userReducer';
 import { uiReducer } from './reducers/uiReducer';
 import { postsReducer } from './reducers/postsReducer';
 import { socketReducer } from './reducers/socketReducer';
+import { messagesReducer } from './reducers/messagesReducer';
+import { usersReducer } from './reducers/usersReducer';
 
 const initialState = {};
 
 const rootReducer = combineReducers({
     user: userReducer,
+    users: usersReducer,
     ui: uiReducer,
     posts: postsReducer,
-    socket: socketReducer
+    socket: socketReducer,
+    messages: messagesReducer
 });
 
 const composeEnhancer = window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__ || compose;

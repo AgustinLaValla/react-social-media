@@ -23,7 +23,7 @@ code {
 }
 
 .nav-container svg {
-  color:#fff;
+  color: #fff;
 }
 
 .login__bottomText {
@@ -31,8 +31,6 @@ code {
   display: block;
   margin-top: 15px;
 }
-
-
 
 ::-webkit-scrollbar {
   width: 5px;
@@ -95,4 +93,65 @@ code {
   font-size: 20px;
   border: none;
   cursor: pointer;
+}
+
+.chatModal {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+.chatHeader {
+  box-sizing: border-box;
+  width: 100%;
+  height: 60px;
+  background-color: #486b00;
+  color: white;
+  padding: 35px 15px;
+  font-size: 14px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.chatHeader__leftData {
+  display: flex;
+  align-items: center;
+}
+
+.chatHeader__username {
+  margin-left: 10px;
+  cursor: pointer;
+}
+
+.chatContent {
+  background-color: #e3e3e3;
+  height: 100%;
+}
+
+.chatFooter {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: white;
+}
+
+.chatFooter input {
+  flex: 4;
+  line-height: 30px;
+  font-size: 18px;
+  border: none;
+  outline: none;
+}
+
+.notifications__textContainer {
+  max-width: 90%;
+  word-wrap: break-word;
+}
+
+.notifications_menuItem {
+  word-wrap: break-word;
+  
 }
