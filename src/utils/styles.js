@@ -6,13 +6,13 @@ export const getStyles = (theme) => ({
     paper: {
         padding: 20
     },
-    notificationsMenu:{
+    notificationsMenu: {
         [theme.breakpoints.down('sm')]: {
-            maxWidth:'80%'
+            maxWidth: '80%'
         }
     },
     notifications_menuItem: {
-        fontSize:'12px',
+        fontSize: '12px',
         hyphens: 'auto'
     },
     profile: {
@@ -213,4 +213,23 @@ export const getStyles = (theme) => ({
         padding: '10px',
         maxWidth: '280px'
     },
+
+    usersCard: {
+        margin: '0px 10px',
+        height:'450px'
+    },
+    userCardTitle: {
+        'cursor': 'pointer'
+    },
+    usersCardPicture: {
+        paddingTop: '15px',
+        minHeight: '200px',
+        maxHeight: '200px',
+        width: 'auto',
+        objectFit: 'cover',
+        margin: '0px 10px'
+    },
+    cardUsersContent: {
+        height: '80px'
+    }
 })

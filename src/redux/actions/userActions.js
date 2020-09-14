@@ -77,11 +77,10 @@ export const addOrChangeUserDetails = (id, userDetails, socket, refreshVisitedUs
     try {
         const { data } = await axios.put(`${url}/user/add-user-details/${id}`, userDetails, getHeaders(token));
         saveUserData(data.user)
-        socket.emit('refresh_userData');
+        socket.emit('refresh_userData', { currentUserId: id });
         if (refreshVisitedUserProfile) {
-            socket.emit('refresh_visited_userData');
+            socket.emit('refresh_visited_userData', { visitedUserId: id });
         };
-        dispatch({ type: fromTYPES.SET_AUTHENTICATED, payload: data.user });
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
         dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: error?.response?.data?.message });
@@ -97,7 +96,7 @@ export const getUser = (userId, chatUser = false) => async dispatch => {
         if (!chatUser) {
             dispatch({ type: fromTYPES.SET_VISITED_USER, payload: data.user });
         } else {
-            dispatch({type: fromTYPES.SET_CHAT_USER_DATA, payload: data.user});
+            dispatch({ type: fromTYPES.SET_CHAT_USER_DATA, payload: data.user });
         }
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
 
@@ -108,14 +107,14 @@ export const getUser = (userId, chatUser = false) => async dispatch => {
 };
 
 
-export const changeProfilePic = (image, socket, refreshVisitedUserProfile = false) => async dispatch => {
+export const changeProfilePic = ( userId ,image, socket, refreshVisitedUserProfile = false) => async dispatch => {
     const token = Cookie.getJSON('token');
     dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     try {
         await axios.put(`${url}/images/change-profile-image`, { image }, getHeaders(token));
-        socket.emit('refresh_userData');
+        socket.emit('refresh_userData', { currentUserId: userId });
         if (refreshVisitedUserProfile) {
-            socket.emit('refresh_visited_userData');
+            socket.emit('refresh_visited_userData', { visitedUserId: userId });
         }
 
     } catch (error) {

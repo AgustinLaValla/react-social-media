@@ -11,7 +11,6 @@ import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { getUserImage } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
-import { refreshSinglePost, refreshVisitedUserPost } from '../../redux/actions/postsActions';
 import MyButton from '../layout/MyButton';
 import { DeletePost } from './DeletePost';
 import { getStyles } from '../../utils/styles';

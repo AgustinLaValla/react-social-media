@@ -27,6 +27,7 @@ import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT } from
 //socket
 import socketIOClient from "socket.io-client";
 import { refreshSinglePost, refreshVisitedUserPost } from './redux/actions/postsActions';
+import { refreshUserData } from './redux/actions/userActions';
 
 
 const theme = createMuiTheme(appTheme);
@@ -52,13 +53,13 @@ function App() {
         store.dispatch({ type: SET_UNAUTHENTICATED });
       }
     }
-    return () => {};
+    return () => { };
   }, [])
 
 
   useEffect(() => {
     if (authenticated) {
-      const newSocket = socketIOClient(serverUrl);
+      const newSocket = socketIOClient(`${serverUrl}`);
       dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: newSocket });
       newSocket.emit('online', { username: userData.username, userId: userData._id });
       newSocket.emit('set_private_room', { userId: userData._id });
@@ -80,14 +81,13 @@ function App() {
 
   useEffect(() => {
     if (socket) {
-      socket.on('refresh_single_post', ({ postId }) => {
-        dispatch(refreshSinglePost(postId));
-        console.log('Post refreshed');
-      });
+      socket.on('refresh_userData', () => dispatch(refreshUserData(userData._id)));
+      socket.on('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)));
       socket.on('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)));
     }
     return () => {
       if (socket) {
+        socket.removeListener('refresh_userData', () => dispatch(refreshUserData(userData._id)))
         socket.removeListener('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)))
         socket.removeListener('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)))
       }
@@ -105,7 +105,7 @@ function App() {
               <Route exact path='/' component={Home} />
               <Route exact path='/login' component={Login} />
               <Route exact path='/signup' component={Signup} />
-              <Route exact path="/users" component={Users}/>
+              <Route exact path="/users" component={Users} />
               <AuthRoute exact path="/user/:id" component={User} authenticated={authenticated} />
               <AuthRoute exact path="/user/:id/post/:postId" component={User} authenticated={authenticated} />
               <Redirect to="/" />

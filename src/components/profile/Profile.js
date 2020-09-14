@@ -57,16 +57,6 @@ export const Profile = () => {
         await userData.google ? dispatch(logout(signOut)) : dispatch(logout())
     };
 
-    useEffect(() => {
-        if (socket) {
-            socket.on('refresh_userData', () => dispatch(refreshUserData(userData._id)));
-        }
-        return () => socket
-            ? socket.removeListener('refresh_userData', () => dispatch(refreshUserData(userData._id)))
-            : null
-    }, [socket]);
-
-
     return (
         <div>
             {loading && <p>Loading...</p>}

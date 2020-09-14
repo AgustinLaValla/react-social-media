@@ -10,7 +10,7 @@ import { renovateToken } from '../utils/utils';
 import { useGoogleLogout } from 'react-google-login';
 import { clientId } from '../utils/utils';
 import ChatModal from '../components/chat/ChatModal';
-import { OPEN_CHAT_MODAL, CLEAR_MESSAGES, CLEAR_VISITED_USER_DATA, CLEAR_CHAT_USER_DATA } from '../redux/types';
+import { OPEN_CHAT_MODAL, CLEAR_MESSAGES, CLEAR_CHAT_USER_DATA } from '../redux/types';
 
 export const Home = () => {
 

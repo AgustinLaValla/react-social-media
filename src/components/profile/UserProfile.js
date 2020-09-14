@@ -39,7 +39,7 @@ export const UserProfile = ({ user }) => {
     const handleInputFileChange = (imageFile) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
-        reader.onloadend = () => dispatch(changeProfilePic(reader.result, socket, isUserOwnProfile));
+        reader.onloadend = () => dispatch(changeProfilePic( userData._id ,reader.result, socket, isUserOwnProfile));
     };
 
 
@@ -49,7 +49,7 @@ export const UserProfile = ({ user }) => {
         } else {
             setIsUserOwnProfile(false);
         }
-        // return () => dispatch({type:fromTYPES.CLEAR_VISITED_USER_DATA});
+        return () => null;
     }, [userData, user]);
 
 
