@@ -3,7 +3,7 @@ import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import Typography from '@material-ui/core/Typography';
 
-const UserMenu = ({ anchorEl,userId, username, handleClose, goToUserProfile }) => {
+const UserMenu = ({ anchorEl,userId, username, handleClose, goToUserProfile, openChat }) => {
     return (
         <Menu
             anchorEl={anchorEl}
@@ -14,11 +14,11 @@ const UserMenu = ({ anchorEl,userId, username, handleClose, goToUserProfile }) =
             <MenuItem onClick={() => { handleClose(); goToUserProfile(userId) }}>
                 <Typography>{`Go to ${username} Profile`}</Typography>
             </MenuItem>
-            <MenuItem onClick={handleClose}>
+            <MenuItem onClick={() => { handleClose(); openChat(userId) }}>
                 <Typography>{`Chat with ${username}`}</Typography>
             </MenuItem>
         </Menu>
     )
 }
 
-export default UserMenu
+export default UserMenu;

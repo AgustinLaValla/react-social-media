@@ -109,6 +109,7 @@ const User = ({ user }) => {
                     username={user.username}
                     handleClose={() => setAnchorEl(null)}
                     goToUserProfile={goToUserProfile}
+                    openChat={openChat}
                 />
 
             </Card>

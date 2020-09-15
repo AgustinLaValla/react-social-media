@@ -107,7 +107,7 @@ export const getUser = (userId, chatUser = false) => async dispatch => {
 };
 
 
-export const changeProfilePic = ( userId ,image, socket, refreshVisitedUserProfile = false) => async dispatch => {
+export const changeProfilePic = (userId, image, socket, refreshVisitedUserProfile = false) => async dispatch => {
     const token = Cookie.getJSON('token');
     dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     try {
@@ -120,5 +120,3 @@ export const changeProfilePic = ( userId ,image, socket, refreshVisitedUserProfi
     } catch (error) {
     }
 }
-
-

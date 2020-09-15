@@ -60,6 +60,7 @@ function App() {
   useEffect(() => {
     if (authenticated) {
       const newSocket = socketIOClient(`${serverUrl}`);
+      // const newSocket = socketIOClient('http://localhost:4000');
       dispatch({ type: SET_SOCKET_GLOBAL_OBJECT, payload: newSocket });
       newSocket.emit('online', { username: userData.username, userId: userData._id });
       newSocket.emit('set_private_room', { userId: userData._id });

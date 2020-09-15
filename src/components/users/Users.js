@@ -1,6 +1,6 @@
 import React, { useEffect, useState, Fragment } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUsers } from '../../redux/actions/usersActions';
+import { getUsers, searchUsers } from '../../redux/actions/usersActions';
 import Grid from '@material-ui/core/Grid';
 import SearchIcon from '@material-ui/icons/Search';
 import User from './User';
@@ -26,6 +26,15 @@ const Users = () => {
         dispatch({ type: CLEAR_CHAT_USER_DATA });
     };
 
+
+    const searchHandler = () => {
+        if (searchText) {
+            dispatch(searchUsers(searchText));
+        } else {
+            dispatch(getUsers());
+        }
+    }
+
     useEffect(() => {
         dispatch(getUsers());
         return () => null;
@@ -36,9 +45,14 @@ const Users = () => {
         <Fragment>
             <div className="searchContainer">
                 <div className="users__searcher">
-                    <input type="text" value={searchText} onChange={(ev) => setSearchText(ev.target.value)} />
+                    <input
+                        type="text"
+                        value={searchText}
+                        onChange={(ev) => setSearchText(ev.target.value)}
+                        onKeyUp={searchHandler}
+                    />
                     <Link to="users">
-                        <SearchIcon className="users__inputButton" />
+                        <SearchIcon className="users__inputButton" onClick={searchHandler} />
                     </Link>
                 </div>
             </div>

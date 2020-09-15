@@ -12,19 +12,17 @@ import { getStyles } from '../../utils/styles';
 import { useDispatch, useSelector } from 'react-redux';
 import { OPEN_CHAT_MODAL } from '../../redux/types';
 import { getUser } from '../../redux/actions/userActions';
-import axios from 'axios';
-import { url, getHeaders } from '../../utils/utils';
-import Cookie from 'js-cookie';
+
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-const ChatNotifications = ({ chatNotifications }) => {
+const ChatNotifications = ({ chatNotifications, markMessages, markOwnMessages }) => {
     const classes = useStyles();
 
     const [anchorEl, setAnchorEl] = useState(null);
 
     const { userData, authenticated } = useSelector(state => state.user);
-    const { socket } = useSelector(state => state.socket);
+
 
     const dispatch = useDispatch();
 
@@ -34,20 +32,12 @@ const ChatNotifications = ({ chatNotifications }) => {
         dispatch(getUser(userId, true));
         dispatch({ type: OPEN_CHAT_MODAL, payload: true });
         setAnchorEl(null);
-        markMessages(userData._id, userId);
+        if (userData._id !== userId) {
+            markMessages(userData._id, userId);
+        } else {
+            markOwnMessages(userData._id, userId);
+        }
     };
-
-    const markMessages = (senderId, receiverId) => {
-        const token = Cookie.getJSON('token');
-        axios.put(
-            `${url}/messages/mark-messages/${senderId}/${receiverId}`,
-            {},
-            getHeaders(token)
-        ).then();
-        if (socket) {
-            socket.emit('refresh_userData', { currentUserId: senderId });
-        };
-    }
 
     return (
         <Fragment>
