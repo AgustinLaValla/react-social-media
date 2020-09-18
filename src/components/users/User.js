@@ -21,10 +21,11 @@ import { useState } from 'react';
 import UserMenu from './UserMenu';
 import { getUser } from '../../redux/actions/userActions';
 import { OPEN_CHAT_MODAL } from '../../redux/types';
+import './User.css';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-const User = ({ user }) => {
+const User = ({ user, onlineUsers }) => {
 
     const classes = useStyles();
     const [anchorEl, setAnchorEl] = useState(null);
@@ -38,7 +39,7 @@ const User = ({ user }) => {
     const goToUserProfile = (userId) => history.push(`/user/${userId}`);
 
     const getUserBiography = (userBio) => {
-        if(!authenticated) return;
+        if (!authenticated) return;
         if (userBio) {
             if (userBio.length >= 100) {
                 return userBio.slice(0, 100) + '...';
@@ -50,6 +51,11 @@ const User = ({ user }) => {
         }
     };
 
+    const getUserStatus = () => {
+        const isOnline = onlineUsers.find(onlineUser => onlineUser === user._id);
+        return isOnline ? 'connected' : 'disconnected';
+    }
+
     const openChat = (userId) => {
         if (authenticated) {
             dispatch(getUser(userId, true));
@@ -59,9 +65,11 @@ const User = ({ user }) => {
         }
     };
 
+
     return (
         <Grid item lg={3} md={4} sm={6} xs={12}>
             <Card className={classes.usersCard}>
+                <div className={getUserStatus()}></div>
                 <CardHeader
                     avatar={
                         <Avatar src={getUserImage(user)} />

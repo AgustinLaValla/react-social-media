@@ -13,6 +13,7 @@ import PeopleIcon from '@material-ui/icons/People';
 import axios from 'axios';
 import { url, getHeaders } from '../../utils/utils';
 import Cookie from 'js-cookie';
+import './Navbar.css';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 

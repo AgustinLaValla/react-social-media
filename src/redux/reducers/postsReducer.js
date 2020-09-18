@@ -2,6 +2,8 @@ import * as fromTYPES from '../types';
 
 const initialState = {
     posts: [],
+    postsLimit: 0,
+    totalPosts:0,
     visitedUserPosts: [],
     errors: null
 }
@@ -35,6 +37,18 @@ export const postsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 visitedUserPosts: [...state.visitedUserPosts.map(post => post._id === action.payload._id ? { ...action.payload } : post )]
+            }
+
+        case fromTYPES.SET_POSTS_LIMIT:
+            return {
+                ...state,
+                postsLimit: action.payload
+            }
+
+        case fromTYPES.SET_TOTAL_POSTS:
+            return {
+                ...state,
+                totalPosts: action.payload
             }
 
         default:

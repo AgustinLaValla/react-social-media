@@ -25,35 +25,66 @@ const ChatModal = ({ open, handleClose, user, currentUser, socket }) => {
 
     const classes = useStyles();
 
-    const { visitedUserData } = useSelector(state => state.user);
     const { messages } = useSelector(state => state.messages);
     const [receiverIsTyping, setReceiverIsTyping] = useState();
     const [chatPaperClassName, setChatPaperClassName] = useState(classes.chatPaper);
+    const [messagesLimit, setMessagesLimit] = useState(0);
 
-    let typing;
+    let [typing, setTyping] = useState(null);
 
     const dispatch = useDispatch();
 
-    const get_messages = () => {
-        dispatch(getMessages(currentUser._id, user._id));
+    const get_messages = (action) => {
+
+        if (action === 'onload') {
+            setMessagesLimit(prev => {
+                messagesApiCall(30);
+                return 30;
+            });
+        };
+
+        if (action === 'onScroll') {
+            setMessagesLimit(prev => {
+                const totalMessages = getTotalMessages();
+                if (!isNaN(totalMessages) && totalMessages > prev) {
+                    messagesApiCall(prev + 30);
+                    return prev + 30;
+                }
+                return prev;
+            });
+        };
+        if (action === 'newMessage') {
+            setMessagesLimit(prev => {
+                const messagesLengt = getMessagesLength() + 1;
+                messagesApiCall(messagesLengt);
+                return messagesLengt > prev + 1 ? messagesLengt : prev;
+            });
+        };
+
+    };
+
+    const messagesApiCall = (limit) => {
+        dispatch(getMessages(currentUser._id, user._id, limit));
         setTimeout(() => {
             const messagesContainer = document.querySelector('.chatContent');
             if (messagesContainer) {
                 messagesContainer.scrollTop = messagesContainer.scrollHeight;
             }
         }, 900);
-    };
+    }
 
     const startTyping = () => {
         socket.emit('start_typing', { sender: currentUser._id, receiver: user._id });
 
-        if (typing) {
-            clearTimeout(typing);
-        }
+        setTyping((prev) => {
+            if (prev) {
+                clearTimeout(prev);
+            }
+            return setTimeout(() => {
+                socket.emit('stop_typing', { sender: currentUser._id, receiver: user._id });
+            }, 3000);
+        });
 
-        typing = setTimeout(() => {
-            socket.emit('stop_typing', { sender: currentUser._id, receiver: user._id });
-        }, 3000);
     }
 
     const typingListener = (data) => {
@@ -71,18 +102,31 @@ const ChatModal = ({ open, handleClose, user, currentUser, socket }) => {
     }
 
 
-    useEffect(() => {
-        get_messages();
-    }, [visitedUserData, user]);
+    const getTotalMessages = () => {
+        return parseInt(JSON.parse(localStorage.getItem('totalMessages')));
+    }
+
+    const getMessagesLength = () => parseInt(JSON.parse(localStorage.getItem('messagesLength')));
+
+    const onChatRefresh = ({ senderId }) => senderId === user._id || senderId === currentUser._id
+        ? get_messages('newMessage')
+        : null;
 
     useEffect(() => {
-        socket.on('refresh_chat', get_messages);
-        socket.on('is_typing', typingListener)
+        get_messages('onload');
+        return () => { };
+    }, [user]);
+
+    useEffect(() => {
+        socket.on('refresh_chat', onChatRefresh);
+        socket.on('is_typing', typingListener);
         return () => {
-            socket.removeListener('refresh_chat', get_messages);
-            socket.removeListener('is_typing', typingListener)
+            socket.removeListener('refresh_chat', onChatRefresh);
+            socket.removeListener('is_typing', typingListener);
             dispatch({ type: CLEAR_CHAT_USER_DATA });
             dispatch({ type: CLEAR_MESSAGES });
+            setMessagesLimit(0);
+            localStorage.removeItem('totalMessages');
         };
     }, []);
 
@@ -109,6 +153,7 @@ const ChatModal = ({ open, handleClose, user, currentUser, socket }) => {
                     socket={socket}
                     typing={receiverIsTyping}
                     username={user.username}
+                    onScroll={() => get_messages('onScroll')}
                 />
                 <ChatFooter
                     senderId={currentUser._id}

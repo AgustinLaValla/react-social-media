@@ -18,6 +18,7 @@ const ChatFooter = ({ senderId, receiverId, receivername, socket, startTyping })
 
     const sendMessage = (ev) => {
         ev.preventDefault();
+        if(!messageBody) return;
         const token = Cookie.getJSON('token');
         axios.post(
             `${url}/messages/send-message/${senderId}/${receiverId}`,

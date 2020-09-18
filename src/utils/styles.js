@@ -215,8 +215,8 @@ export const getStyles = (theme) => ({
     },
 
     usersCard: {
-        margin: '0px 10px',
-        height:'450px'
+        margin: '0px 10px 15px 10px',
+        height:'450px',
     },
     userCardTitle: {
         'cursor': 'pointer'

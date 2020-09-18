@@ -34,8 +34,8 @@
 }
 
 @media (max-width: 530px) {
-    .users__inputButton {
-        padding-left: 5px  !important;
-        padding-right: 5px !important;
-    }
+  .users__inputButton {
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+  }
 }

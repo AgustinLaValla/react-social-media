@@ -13,6 +13,7 @@ import ChatIcon from '@material-ui/icons/Chat';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 //styles
 import { getStyles } from '../../utils/styles';
+import './Navbar.css'
 //dayjs
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';

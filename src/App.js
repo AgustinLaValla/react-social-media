@@ -8,7 +8,7 @@ import Login from './pages/Login';
 import Signup from './pages/Signup';
 import { Navbar } from './components/layout/Navbar';
 import { User } from './pages/User';
-import Users from './components/users/Users';
+import Users from './pages/Users';
 //protected route component
 import AuthRoute from './utils/AuthRoute';
 //material-ui
@@ -23,10 +23,10 @@ import jwtDecode from 'jwt-decode';
 import store from './redux/store';
 import { useSelector, useDispatch } from 'react-redux';
 //actions
-import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT } from './redux/types';
+import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT, SET_ONLINE_USERS, SET_POSTS_LIMIT } from './redux/types';
 //socket
 import socketIOClient from "socket.io-client";
-import { refreshSinglePost, refreshVisitedUserPost } from './redux/actions/postsActions';
+import { refreshSinglePost, refreshVisitedUserPost, getPosts } from './redux/actions/postsActions';
 import { refreshUserData } from './redux/actions/userActions';
 
 
@@ -36,10 +36,16 @@ function App() {
 
   const { authenticated, userData } = useSelector(state => state.user);
   const { socket } = useSelector(state => state.socket);
+  const { postsLimit } = useSelector(state => state.posts);
 
   const dispatch = useDispatch();
 
   const serverUrl = process.env.REACT_APP_SERVER_URI;
+
+  const postsHandler = async () => {
+    await dispatch(getPosts(postsLimit + 1));
+    await dispatch({ type: SET_POSTS_LIMIT, payload: postsLimit + 1 });
+  }
 
   useEffect(() => {
     const token = Cookie.get('token');
@@ -85,12 +91,16 @@ function App() {
       socket.on('refresh_userData', () => dispatch(refreshUserData(userData._id)));
       socket.on('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)));
       socket.on('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)));
+      socket.on('refresh_posts', () => postsHandler());
+      socket.on('usersOnline', ({ onlineUsers }) => dispatch({ type: SET_ONLINE_USERS, payload: onlineUsers }));
     }
     return () => {
       if (socket) {
-        socket.removeListener('refresh_userData', () => dispatch(refreshUserData(userData._id)))
-        socket.removeListener('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)))
-        socket.removeListener('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)))
+        socket.removeListener('refresh_userData', () => dispatch(refreshUserData(userData._id)));
+        socket.removeListener('refresh_single_post', ({ postId }) => dispatch(refreshSinglePost(postId)));
+        socket.removeListener('refresh_userVisited_post', ({ postId }) => dispatch(refreshVisitedUserPost(postId)));
+        socket.removeListener('refresh_posts', () => postsHandler());
+        socket.removeListener('usersOnline', ({ onlineUsers }) => dispatch({ type: SET_ONLINE_USERS, payload: onlineUsers }))
       }
     }
   }, [socket]);

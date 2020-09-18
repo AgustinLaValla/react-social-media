@@ -1,0 +1,22 @@
+
+
+.disconnected {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: red;
+  position: absolute;
+  transform: translate(45px, 45px);
+  z-index: 1000;
+}
+
+.connected {
+  width: 12px;
+  height: 12px;
+  border-radius: 100%;
+  background-color: green;
+  position: absolute;
+  transform: translate(45px, 45px);
+  z-index: 1000;
+}
+
