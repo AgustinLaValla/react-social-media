@@ -8,14 +8,14 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
-import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
+import ErrorMessageDialog from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
 import { login } from '../redux/actions/userActions';
 import { useDispatch, useSelector } from 'react-redux';
 import * as fromTYPES from '../redux/types';
 import { makeStyles } from '@material-ui/core';
 import { getStyles } from '../utils/styles';
-import { GoogleButton } from '../components/layout/GoogleButton';
+import GoogleButton from '../components/layout/GoogleButton';
 
 
 const useStyles = makeStyles(theme => getStyles(theme));
@@ -45,7 +45,7 @@ const Login = () => {
 
     const history = useHistory();
 
-    const { userData, error, loading } = useSelector(state => state.user);
+    const { error, loading } = useSelector(state => state.user);
     const { openErrorsDialog } = useSelector(state => state.ui);
     const dispatch = useDispatch();
 
@@ -126,7 +126,7 @@ const Login = () => {
             />
 
         </div>
-    )
+    );
 }
 
 export default Login;

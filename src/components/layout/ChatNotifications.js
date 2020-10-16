@@ -42,7 +42,7 @@ const ChatNotifications = ({ chatNotifications, markMessages, markOwnMessages })
     return (
         <Fragment>
 
-            <Tooltip placement="top" title="Chat Notifications" className={classes.tooltip}>
+            <Tooltip placement="top" title="Chat Notifications" classes={{tooltip:classes.tooltip}}>
                 <IconButton aria-haspopup="true" aria-controls="noitification-menu" onClick={handleOpen}>
                     {chatNotifications.length > 0
                         ?

@@ -7,7 +7,7 @@ import DialogContentText from '@material-ui/core/DialogContentText';
 import Button from '@material-ui/core/Button';
 
 
-export const ErrorMessageDialog = ({ open, message, onClose, closeDialog }) => {
+const ErrorMessageDialog = ({ open, message, onClose, closeDialog }) => {
 
     return (
 
@@ -26,3 +26,5 @@ export const ErrorMessageDialog = ({ open, message, onClose, closeDialog }) => {
         </Dialog>
     )
 }
+
+export default ErrorMessageDialog;

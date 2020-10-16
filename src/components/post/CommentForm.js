@@ -9,7 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const CommentForm = ({postId, userId, fromVisitedUser, userProfileRoom}) => {
+const CommentForm = ({postId, userId, fromVisitedUser, userProfileRoom}) => {
 
     const classes = useStyles();
 
@@ -40,5 +40,8 @@ export const CommentForm = ({postId, userId, fromVisitedUser, userProfileRoom}) 
             </form>
             <br/>
         </Grid>
-    )
+    );
 }
+
+
+export default CommentForm;

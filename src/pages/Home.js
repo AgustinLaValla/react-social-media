@@ -1,9 +1,10 @@
-import React, { useEffect, useState } from 'react'
-import { Grid } from '@material-ui/core';
-import { Post } from '../components/post/Post';
+import React, { useEffect } from 'react'
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Profile from '../components/profile/Profile';
+import Post from '../components/post/Post';
 import { useSelector, useDispatch } from 'react-redux';
 import { getPosts } from '../redux/actions/postsActions';
-import { Profile } from '../components/profile/Profile';
 import { useHistory } from 'react-router-dom';
 import { renovateToken } from '../utils/utils';
 import { useGoogleLogout } from 'react-google-login';
@@ -12,7 +13,7 @@ import ChatModal from '../components/chat/ChatModal';
 import { OPEN_CHAT_MODAL, CLEAR_MESSAGES, CLEAR_CHAT_USER_DATA, SET_POSTS_LIMIT } from '../redux/types';
 import InfiniteScroll from 'react-infinite-scroll-component';
 
-export const Home = () => {
+const Home = () => {
 
     const { posts, postsLimit, totalPosts } = useSelector(state => state.posts);
     const { socket } = useSelector(state => state.socket);
@@ -66,7 +67,9 @@ export const Home = () => {
                 </InfiniteScroll>
             </Grid>
             <Grid item md={4} xs={12} className="animated fadeIn">
-                <Profile />
+                <Box display={{ xs: 'none', sm: 'block' }}>
+                    <Profile />
+                </Box>
             </Grid>
 
             {
@@ -83,3 +86,6 @@ export const Home = () => {
 
     )
 }
+
+
+export default Home;

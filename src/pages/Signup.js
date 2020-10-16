@@ -9,14 +9,14 @@ import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Button from '@material-ui/core/Button';
 import { useFormik } from 'formik';
-import { ErrorMessageDialog } from '../components/layout/ErrorMessageDialog';
+import ErrorMessageDialog from '../components/layout/ErrorMessageDialog';
 import { Link, useHistory } from 'react-router-dom';
 import { signup } from '../redux/actions/userActions';
 import { useSelector, useDispatch } from 'react-redux';
 import * as fromTYPES from '../redux/types';
 import { getStyles } from '../utils/styles';
 import { makeStyles } from '@material-ui/core';
-import { GoogleButton } from '../components/layout/GoogleButton';
+import GoogleButton from '../components/layout/GoogleButton';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 

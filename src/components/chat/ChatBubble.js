@@ -1,12 +1,12 @@
-import React, { useEffect } from 'react'
+import React from 'react'
 import Avatar from '@material-ui/core/Avatar';
+import Paper from '@material-ui/core/Paper';
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Typography from '@material-ui/core/Typography';
 import { getUserImage } from '../../utils/utils';
 import { getStyles } from '../../utils/styles';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-import Paper from '@material-ui/core/Paper';
-import makeStyles from '@material-ui/core/styles/makeStyles';
-import Typography from '@material-ui/core/Typography';
 import './Chat.css';
 
 dayjs.extend(relativeTime);

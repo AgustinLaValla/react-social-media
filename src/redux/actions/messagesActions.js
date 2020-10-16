@@ -11,8 +11,7 @@ export const getMessages = (senderId, receiverId, limit) => async dispatch => {
 
         const { data } = await axios.get(`${url}/messages/get-messages/${senderId}/${receiverId}?limit=${limit}`, getHeaders(token))
         if (data && data.messages[0]) {
-            await localStorage.setItem('totalMessages', JSON.stringify(data.messages[0].totalMessages));
-            await localStorage.setItem('messagesLength', JSON.stringify(data.messages[0].messages.length));
+            await dispatch({type: fromTYPES.SET_TOTAL_MESSAGES, payload: data.messages[0].totalMessages});
             await dispatch({ type: fromTYPES.SET_MESSAGES, payload: data.messages[0] });
         }
     } catch (error) {

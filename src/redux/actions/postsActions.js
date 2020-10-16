@@ -4,11 +4,11 @@ import { url, getHeaders } from '../../utils/utils';
 import Cookie from 'js-cookie';
 
 export const getPosts = (limit) => async dispatch => {
-    dispatch({ type: fromTYPES.LOADING_UI, payload: true });
+    dispatch({ type: fromTYPES.ACTIVATE_LINEAR_PROGRESS });
     try {
         const { data } = await axios.get(`${url}/posts?limit=${limit}`);
         dispatch({ type: fromTYPES.SET_POSTS, payload: data.posts });
-        dispatch({ type: fromTYPES.LOADING_UI, payload: false });
+        dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         dispatch({type: fromTYPES.SET_TOTAL_POSTS, payload: data.total});
     } catch (error) {
         dispatch({ type: fromTYPES.GET_POSTS_FAILED, payload: error.response?.data.message })
@@ -43,7 +43,7 @@ export const addPost = (post, token, socket) => async dispatch => {
         socket.emit('refresh_posts');
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     } catch (error) {
-        dispatch({ type: fromTYPES.GET_POSTS_FAILED, payload: error.response.data.message });
+        dispatch({ type: fromTYPES.GET_POSTS_FAILED, payload: error });
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
     }
 };

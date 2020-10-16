@@ -3,26 +3,26 @@ import Card from '@material-ui/core/Card';
 import CardContent from '@material-ui/core/CardContent';
 import CardMedia from '@material-ui/core/CardMedia';
 import Typography from '@material-ui/core/Typography';
+import  makeStyles from '@material-ui/core/styles/makeStyles';
 import ChatIcon from '@material-ui/icons/Chat';
 import UnfoldMore from '@material-ui/icons/UnfoldMore';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
-import { makeStyles } from '@material-ui/core';
+import MyButton from '../layout/MyButton';
+import  PostDialog  from './PostDialog';
+import LikeButton from './LikeButton';
+import DeletePost from './DeletePost';
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
 import { getUserImage } from '../../utils/utils';
 import { useSelector, useDispatch } from 'react-redux';
-import MyButton from '../layout/MyButton';
-import { DeletePost } from './DeletePost';
 import { getStyles } from '../../utils/styles';
-import { PostDialog } from './PostDialog';
-import { LikeButton } from './LikeButton';
 import { Link, useHistory } from 'react-router-dom';
 import { getUser } from '../../redux/actions/userActions';
 import { OPEN_CHAT_MODAL } from '../../redux/types';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Post = ({ post, openDialog, fromVisitedUser, userProfileRoom }) => {
+const Post = ({ post, openDialog, fromVisitedUser, userProfileRoom }) => {
 
     const classes = useStyles();
     const { socket } = useSelector(state => state.socket);
@@ -119,3 +119,6 @@ export const Post = ({ post, openDialog, fromVisitedUser, userProfileRoom }) => 
         </Card>
     )
 }
+
+
+export default Post;

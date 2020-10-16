@@ -1,25 +1,32 @@
 import React, { Fragment, useEffect, useRef, useState } from 'react'
-import { makeStyles, Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import makeStyles from '@material-ui/core/styles/makeStyles'
 import MuiLink from '@material-ui/core/Link';
+import LocationOn from '@material-ui/icons/LocationOn';
+import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import LinkIcon from '@material-ui/icons/Link';
+import EditIcon from '@material-ui/icons/Edit';
+import ShareIcon from '@material-ui/icons/Share';
+import EditDetails from '../../components/profile/EditDetails';
+import ErrorMessageDialog from '../../components/layout/ErrorMessageDialog';
 import { useSelector, useDispatch } from 'react-redux';
 import { getUserImage } from '../../utils/utils';
-import LocationOn from '@material-ui/icons/LocationOn';
-import LinkIcon from '@material-ui/icons/Link';
-import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
-import * as dayjs from 'dayjs';
-import * as fromTYPES from '../../redux/types';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import { getStyles } from '../../utils/styles';
-import { EditDetails } from './EditDetails';
-import EditIcon from '@material-ui/icons/Edit';
-import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
+import * as fromTYPES from '../../redux/types';
 import { getUser, changeProfilePic, logout } from '../../redux/actions/userActions';
+import * as dayjs from 'dayjs';
 import { useGoogleLogout } from 'react-google-login';
 import { clientId } from '../../utils/utils';
 
+
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const UserProfile = ({ user }) => {
+const UserProfile = ({ user, totalPosts }) => {
 
     const classes = useStyles();
 
@@ -39,7 +46,7 @@ export const UserProfile = ({ user }) => {
     const handleInputFileChange = (imageFile) => {
         const reader = new FileReader();
         reader.readAsDataURL(imageFile);
-        reader.onloadend = () => dispatch(changeProfilePic( userData._id ,reader.result, socket, isUserOwnProfile));
+        reader.onloadend = () => dispatch(changeProfilePic(userData._id, reader.result, socket, isUserOwnProfile));
     };
 
 
@@ -99,25 +106,31 @@ export const UserProfile = ({ user }) => {
                     }
                 </Fragment>
                 <hr />
-                <div className="profile-details">
-                    <MuiLink
-                        color="primary"
-                        variant="h5"
-                    >
-                        {user.username}
-                    </MuiLink>
-                    {user.bio &&
-                        <Typography align="left" variant="body2">{user.bio}</Typography>
-                    }
-                    <br />
+                <Box className="profile-details">
+
+                    <Box style={{ marginBottom: 15 }}>
+                        <MuiLink
+                            color="primary"
+                            variant="h5"
+                        >
+                            {user.username}
+                        </MuiLink>
+                    </Box>
+
+                    <Box style={{ marginBottom: 15 }}>
+                        {user.bio &&
+                            <Typography align="left" variant="body2">{user.bio}</Typography>
+                        }
+                    </Box>
+
                     {user.location &&
-                        <Fragment>
+                        <Box style={{ marginBottom: 15 }}>
                             <LocationOn color="primary" /> <span>{user.location}</span>
-                        </Fragment>
+                        </Box>
                     }
-                    <br />
+
                     {user.website &&
-                        <Fragment>
+                        <Box style={{ marginBottom: 15 }}>
                             <LinkIcon color="primary" />
                             <a
                                 href={user.website}
@@ -127,11 +140,21 @@ export const UserProfile = ({ user }) => {
                                 {' '}{user.website}
                             </a>
                             <hr />
-                        </Fragment>
+                        </Box>
                     }
-                    <CalendarTodayIcon color="primary" />{' '}
-                    <span>Joined from {dayjs(user.createdAt).format('MMM-YYYY')}</span>
-                    <br />
+
+
+                    <Box style={{ marginBottom: 15 }}>
+                        <CalendarTodayIcon color="primary" />{' '}
+                        <span>Joined from {dayjs(user.createdAt).format('MMM-YYYY')}</span>
+                    </Box>
+
+                    <Box style={{ marginBottom: 15 }}>
+                        <ShareIcon color="primary"></ShareIcon> {' '}
+                        <span>{totalPosts} posts shared</span>
+                    </Box>
+
+
                     {isUserOwnProfile &&
                         <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
                             <IconButton onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}>
@@ -157,7 +180,7 @@ export const UserProfile = ({ user }) => {
                             <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
                         </Fragment>
                     }
-                </div>
+                </Box>
             </div>
             {isUserOwnProfile &&
                 <Fragment>
@@ -183,3 +206,5 @@ export const UserProfile = ({ user }) => {
         </Paper>
     )
 }
+
+export default UserProfile;

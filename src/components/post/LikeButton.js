@@ -1,15 +1,15 @@
 import React, { Fragment, useEffect, useState } from 'react';
 import FavoriteIcon from '@material-ui/icons/Favorite';
-import { Link } from 'react-router-dom';
 import FavoriteBorderIcon from '@material-ui/icons/FavoriteBorder';
-import { url, getHeaders } from '../../utils/utils';
-import Cookie from 'js-cookie';
-import axios from 'axios';
 import MyButton from '../layout/MyButton';
+import { Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import * as fromTYPES from '../../redux/types';
+import { url, getHeaders } from '../../utils/utils';
+import axios from 'axios';
+import Cookie from 'js-cookie';
 
-export const LikeButton = ({ authenticated, classes, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
+const LikeButton = ({ authenticated, classes, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
 
     const [postLiked, setPostLiked] = useState(false);
     const dispatch = useDispatch();
@@ -27,7 +27,6 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
             }
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         } catch (error) {
-            console.log(error);
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         }
     }
@@ -43,7 +42,6 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
             }
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         } catch (error) {
-            console.log(error);
             dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         }
 
@@ -79,3 +77,6 @@ export const LikeButton = ({ authenticated, classes, post, userData, socket, fro
         </Fragment>
     )
 }
+
+
+export default LikeButton;

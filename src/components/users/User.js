@@ -1,8 +1,4 @@
 import React from 'react';
-import { getUserImage } from '../../utils/utils';
-import { getStyles } from '../../utils/styles';
-import { useHistory } from 'react-router-dom';
-import { useSelector, useDispatch } from 'react-redux';
 import Grid from '@material-ui/core/Grid';
 import Card from '@material-ui/core/Card';
 import CardHeader from '@material-ui/core/CardHeader';
@@ -17,10 +13,14 @@ import MoreVertIcon from '@material-ui/icons/MoreVert';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import QuestionAnswerIcon from '@material-ui/icons/QuestionAnswer';
 import AccountCircleIcon from '@material-ui/icons/AccountCircle';
-import { useState } from 'react';
 import UserMenu from './UserMenu';
+import { useState } from 'react';
 import { getUser } from '../../redux/actions/userActions';
 import { OPEN_CHAT_MODAL } from '../../redux/types';
+import { getUserImage } from '../../utils/utils';
+import { getStyles } from '../../utils/styles';
+import { useHistory } from 'react-router-dom';
+import { useSelector, useDispatch } from 'react-redux';
 import './User.css';
 
 const useStyles = makeStyles(theme => getStyles(theme));

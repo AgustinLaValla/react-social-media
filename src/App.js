@@ -1,33 +1,24 @@
 import React, { useEffect } from 'react';
-import './index.css';
-//router
 import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
-//components
-import { Home } from './pages/Home';
+import Home from './pages/Home';
 import Login from './pages/Login';
 import Signup from './pages/Signup';
-import { Navbar } from './components/layout/Navbar';
-import { User } from './pages/User';
+import Navbar from './components/layout/Navbar';
+import User from './pages/user/User';
 import Users from './pages/Users';
-//protected route component
 import AuthRoute from './utils/AuthRoute';
-//material-ui
-import { createMuiTheme } from '@material-ui/core';
+import createMuiTheme from '@material-ui/core/styles/createMuiTheme';
 import ThemeProvider from '@material-ui/styles/ThemeProvider';
 import { appTheme, getUserData } from './utils/utils';
-//cookie
 import Cookie from 'js-cookie';
-//jwt-decode
 import jwtDecode from 'jwt-decode';
-//redux
 import store from './redux/store';
 import { useSelector, useDispatch } from 'react-redux';
-//actions
-import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT, SET_ONLINE_USERS, SET_POSTS_LIMIT } from './redux/types';
-//socket
-import socketIOClient from "socket.io-client";
 import { refreshSinglePost, refreshVisitedUserPost, getPosts } from './redux/actions/postsActions';
 import { refreshUserData } from './redux/actions/userActions';
+import { SET_AUTHENTICATED, SET_UNAUTHENTICATED, SET_SOCKET_GLOBAL_OBJECT, SET_ONLINE_USERS, SET_POSTS_LIMIT } from './redux/types';
+import socketIOClient from "socket.io-client";
+import './index.css';
 
 
 const theme = createMuiTheme(appTheme);
@@ -36,13 +27,15 @@ function App() {
 
   const { authenticated, userData } = useSelector(state => state.user);
   const { socket } = useSelector(state => state.socket);
-  const { postsLimit } = useSelector(state => state.posts);
+
+  const getPostLimit = () => store.getState().posts.postsLimit;
 
   const dispatch = useDispatch();
 
   const serverUrl = process.env.REACT_APP_SERVER_URI;
 
   const postsHandler = async () => {
+    const postsLimit = getPostLimit();
     await dispatch(getPosts(postsLimit + 1));
     await dispatch({ type: SET_POSTS_LIMIT, payload: postsLimit + 1 });
   }

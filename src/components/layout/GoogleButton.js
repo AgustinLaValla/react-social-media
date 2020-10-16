@@ -2,11 +2,11 @@ import React from 'react';
 import { GoogleLogin } from 'react-google-login';
 import { useDispatch } from 'react-redux';
 import * as fromTYPES from '../../redux/types';
-import { useHistory } from 'react-router-dom';
 import { googleLogin } from '../../redux/actions/userActions';
 import { clientId } from '../../utils/utils';
+import { useHistory } from 'react-router-dom';
 
-export const GoogleButton = () => {
+const GoogleButton = () => {
 
     const dispatch = useDispatch();
 
@@ -15,7 +15,8 @@ export const GoogleButton = () => {
     const onGoogleLoginsSuccess = ({ tokenId }) => {
         dispatch(googleLogin(tokenId, history));
     }
-    const onFailure = (res) => {
+    
+    const onFailure = () => {
         dispatch({ type: fromTYPES.SET_USER_ERRORS, payload: "It's seems there is an error" });
         dispatch({ type: fromTYPES.OPEN_ERRORS_DIALOG, payload: true });
     };
@@ -40,3 +41,6 @@ export const GoogleButton = () => {
         </div>
     )
 }
+
+
+export default GoogleButton;

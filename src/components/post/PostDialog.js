@@ -1,19 +1,25 @@
-import React, { useState } from 'react'
-import { Button, Dialog, DialogTitle, DialogActions, DialogContent, makeStyles, TextField, Grid, Typography } from '@material-ui/core';
-import { useDispatch } from 'react-redux';
-import { getStyles } from '../../utils/styles';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import Button from '@material-ui/core/Button';
+import Grid from '@material-ui/core/Grid';
+import Typography from '@material-ui/core/Typography';
+import Dialog from '@material-ui/core/Dialog';
+import DialogTitle from '@material-ui/core/DialogTitle';
+import DialogActions from '@material-ui/core/DialogActions';
+import DialogContent from '@material-ui/core/DialogContent';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import CloseIcon from '@material-ui/icons/Close';
+import ChatIcon from '@material-ui/icons/Chat';
+import LikeButton from './LikeButton';
+import  Comments  from './Comments';
 import MyButton from '../layout/MyButton';
+import { Link } from 'react-router-dom';
+import { getStyles } from '../../utils/styles';
 import { getUserImage } from '../../utils/utils';
 import dayjs from 'dayjs';
-import { LikeButton } from './LikeButton';
-import ChatIcon from '@material-ui/icons/Chat';
-import { Comments } from './Comments';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const PostDialog = ({ open, handleClose, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
+const PostDialog = ({ open, handleClose, post, userData, socket, fromVisitedUser, userProfileRoom }) => {
 
     const classes = useStyles();
 
@@ -78,3 +84,5 @@ export const PostDialog = ({ open, handleClose, post, userData, socket, fromVisi
         </Dialog>
     )
 }
+
+export default PostDialog;

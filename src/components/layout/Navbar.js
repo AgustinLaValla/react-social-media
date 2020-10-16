@@ -1,23 +1,30 @@
 import React, { Fragment, useState, useEffect } from 'react';
-import { AppBar, Toolbar, Button, LinearProgress, makeStyles, Tooltip, IconButton } from '@material-ui/core';
-import { Link } from 'react-router-dom';
-import { getStyles } from '../../utils/styles';
-import { useSelector } from 'react-redux';
-import MyButton from './MyButton';
+import AppBar from '@material-ui/core/AppBar';
+import Toolbar from '@material-ui/core/Toolbar';
+import Button from '@material-ui/core/Button';
+import LinearProgress from '@material-ui/core/LinearProgress';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import makeStyles from '@material-ui/core/styles/makeStyles';
 import AddIcon from '@material-ui/icons/Add';
 import HomeIcon from '@material-ui/icons/Home';
-import { AddPost } from '../post/AddPost';
-import { Notifications } from './Notifications';
-import ChatNotifications from './ChatNotifications';
 import PeopleIcon from '@material-ui/icons/People';
-import axios from 'axios';
+import AccountBoxIcon from '@material-ui/icons/AccountBox';
+import MyButton from './MyButton';
+import Notifications from './Notifications';
+import ChatNotifications from './ChatNotifications';
+import AddPost from '../post/AddPost';
+import { Link } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { getStyles } from '../../utils/styles';
 import { url, getHeaders } from '../../utils/utils';
+import axios from 'axios';
 import Cookie from 'js-cookie';
 import './Navbar.css';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Navbar = () => {
+const Navbar = () => {
 
     const [openAddPostDialog, setOpenAddPostDialog] = useState(false);
 
@@ -112,7 +119,7 @@ export const Navbar = () => {
 
 
 
-                        <Tooltip title="Home" className={classes.tooltip}>
+                        <Tooltip title="Home" classes={{ tooltip: classes.tooltip }}>
                             <IconButton component={Link} to='/'>
                                 <HomeIcon color="primary" />
                             </IconButton>
@@ -123,9 +130,15 @@ export const Navbar = () => {
 
                         <ChatNotifications chatNotifications={chatNotifications} markMessages={markMessages} markOwnMessages={markOwnMessages} />
 
-                        <Tooltip title="User searcher" className={classes.tooltip}>
+                        <Tooltip title="User searcher" classes={{ tooltip: classes.tooltip }}>
                             <IconButton component={Link} to='/users'>
                                 <PeopleIcon color="primary" />
+                            </IconButton>
+                        </Tooltip>
+
+                        <Tooltip title="Profile" classes={{tooltip: classes.tooltip}}>
+                            <IconButton component={Link} to={`/user/${userData._id}`}>
+                                <AccountBoxIcon color="primary"></AccountBoxIcon>
                             </IconButton>
                         </Tooltip>
 
@@ -144,3 +157,6 @@ export const Navbar = () => {
         </AppBar>
     )
 }
+
+
+export default Navbar;

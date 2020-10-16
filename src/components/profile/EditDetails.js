@@ -7,7 +7,7 @@ import { addOrChangeUserDetails } from '../../redux/actions/userActions';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const EditDetails = ({ open, handleClose, bio, location, website, userId, close, socket, fromVisitedUser }) => {
+const EditDetails = ({ open, handleClose, bio, location, website, userId, close, socket, fromVisitedUser }) => {
 
     const classes = useStyles();
 
@@ -82,3 +82,6 @@ export const EditDetails = ({ open, handleClose, bio, location, website, userId,
 
     )
 }
+
+
+export default EditDetails;

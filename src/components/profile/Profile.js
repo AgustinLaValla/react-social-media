@@ -1,33 +1,38 @@
-import React, { Fragment, useEffect, useRef } from 'react'
-import { makeStyles, Button, Paper, Typography, Tooltip, IconButton } from '@material-ui/core';
+import React, { useRef } from 'react'
+import makeStyles from '@material-ui/core/styles/makeStyles';
+import Button from '@material-ui/core/Button';
+import Paper from '@material-ui/core/Paper';
+import Typography from '@material-ui/core/Typography';
+import Tooltip from '@material-ui/core/Tooltip';
+import IconButton from '@material-ui/core/IconButton';
+import Box from '@material-ui/core/Box';
 import MuiLink from '@material-ui/core/Link';
-import { useSelector, useDispatch } from 'react-redux';
-import { Link } from 'react-router-dom';
-import LocationOn from '@material-ui/icons/LocationOn';
 import LinkIcon from '@material-ui/icons/Link';
+import LocationOn from '@material-ui/icons/LocationOn';
 import CalendarTodayIcon from '@material-ui/icons/CalendarToday';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import EditIcon from '@material-ui/icons/Edit';
+import EditDetails from './EditDetails';
+import ErrorMessageDialog from '../layout/ErrorMessageDialog';
+import { useSelector, useDispatch } from 'react-redux';
+import * as fromTYPES from '../../redux/types';
+import { logout } from '../../redux/actions/userActions';
+import { Link } from 'react-router-dom';
+import { url, getHeaders, getUserImage } from '../../utils/utils';
+import { getStyles } from '../../utils/styles';
+import { clientId } from '../../utils/utils';
 import * as dayjs from 'dayjs';
 import axios from 'axios';
-import { url, getHeaders, getUserImage } from '../../utils/utils';
 import Cookie from 'js-cookie';
-import * as fromTYPES from '../../redux/types';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import { logout } from '../../redux/actions/userActions';
-import { refreshUserData } from '../../redux/actions/userActions';
-import { getStyles } from '../../utils/styles';
-import { EditDetails } from './EditDetails';
-import EditIcon from '@material-ui/icons/Edit';
-import { ErrorMessageDialog } from '../layout/ErrorMessageDialog';
 import { useGoogleLogout } from 'react-google-login';
-import { clientId } from '../../utils/utils';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Profile = () => {
+const Profile = () => {
 
     const classes = useStyles();
     const { userData, authenticated, error } = useSelector(state => state.user);
-    const { loading, openEditUserDetailsDialog, openErrorsDialog } = useSelector(state => state.ui);
+    const { openEditUserDetailsDialog, openErrorsDialog } = useSelector(state => state.ui);
     const { socket } = useSelector(state => state.socket);
     const dispatch = useDispatch();
     const inputFile = useRef();
@@ -59,7 +64,6 @@ export const Profile = () => {
 
     return (
         <div>
-            {loading && <p>Loading...</p>}
             {authenticated &&
                 <Paper className={classes.paper}>
                     <div className={classes.profile}>
@@ -82,26 +86,32 @@ export const Profile = () => {
                         </Tooltip>
                         <hr />
                         <div className="profile-details">
-                            <MuiLink
-                                component={Link}
-                                to={`/user/${userData._id}`}
-                                color="primary"
-                                variant="h5"
-                            >
-                                @{userData.username}
-                            </MuiLink>
+
+                            <Box style={{ marginBottom: 15 }}>
+                                <MuiLink
+                                    component={Link}
+                                    to={`/user/${userData._id}`}
+                                    color="primary"
+                                    variant="h5"
+                                >
+                                    @{userData.username}
+                                </MuiLink>
+                            </Box>
+
                             {userData.bio &&
-                                <Typography align="left" variant="body2">{userData.bio}</Typography>
+                                <Box style={{ marginBottom: 15 }}>
+                                    <Typography align="left" variant="body2">{userData.bio}</Typography>
+                                </Box>
                             }
-                            <br />
+
                             {userData.location &&
-                                <Fragment>
+                                <Box style={{ marginBottom: 15 }}>
                                     <LocationOn color="primary" /> <span>{userData.location}</span>
-                                </Fragment>
+                                </Box>
                             }
-                            <br />
+
                             {userData.website &&
-                                <Fragment>
+                                <Box style={{ marginBottom: 15 }}>
                                     <LinkIcon color="primary" />
                                     <a
                                         href={userData.website}
@@ -111,28 +121,36 @@ export const Profile = () => {
                                         {' '}{userData.website}
                                     </a>
                                     <hr />
-                                </Fragment>
+                                </Box>
+
                             }
-                            <CalendarTodayIcon color="primary" />{' '}
-                            <span>Joined from {dayjs(userData.createdAt).format('MMM-YYYY')}</span>
-                            <br />
-                            <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
-                                <IconButton onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}>
-                                    <EditIcon color="primary" />
-                                </IconButton>
-                            </Tooltip>
-                            <span
-                                onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}
-                                style={{ cursor: 'pointer' }}
-                            >
-                                Edit my details</span>
-                            <br />
-                            <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
-                                <IconButton onClick={handleLogout}>
-                                    <ExitToAppIcon fontSize="large" color="primary" />
-                                </IconButton>
-                            </Tooltip>
-                            <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
+
+                            <Box style={{ marginBottom: 15 }}>
+                                <CalendarTodayIcon color="primary" />{' '}
+                                <span>Joined from {dayjs(userData.createdAt).format('MMM-YYYY')}</span>
+                            </Box>
+
+                            <Box style={{ marginBottom: 15 }}>
+                                <Tooltip title="Edit details" classes={{ tooltip: classes.tooltip }}>
+                                    <IconButton onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}>
+                                        <EditIcon color="primary" />
+                                    </IconButton>
+                                </Tooltip>
+                                <span
+                                    onClick={() => dispatch({ type: fromTYPES.OPEN_USER_DETAILS_DIALOG, payload: true })}
+                                    style={{ cursor: 'pointer' }}
+                                >
+                                    Edit my details</span>
+                            </Box>
+
+                            <Box style={{ marginBottom: 15 }}>
+                                <Tooltip title="Logout" classes={{ tooltip: classes.tooltip }}>
+                                    <IconButton onClick={handleLogout}>
+                                        <ExitToAppIcon fontSize="large" color="primary" />
+                                    </IconButton>
+                                </Tooltip>
+                                <span onClick={handleLogout} style={{ cursor: 'pointer' }}>Logout</span>
+                            </Box>
                         </div>
                     </div>
                 </Paper>
@@ -168,3 +186,6 @@ export const Profile = () => {
         </div>
     )
 }
+
+
+export default Profile;

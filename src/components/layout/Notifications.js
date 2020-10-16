@@ -1,6 +1,5 @@
 import React, { useState, useEffect } from 'react';
 import { Fragment } from 'react';
-//material-ui
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import Tooltip from '@material-ui/core/Tooltip';
 import IconButton from '@material-ui/core/IconButton';
@@ -11,26 +10,19 @@ import Typography from '@material-ui/core/Typography';
 import FavoriteIcon from '@material-ui/icons/Favorite';
 import ChatIcon from '@material-ui/icons/Chat';
 import NotificationsIcon from '@material-ui/icons/Notifications';
-//styles
 import { getStyles } from '../../utils/styles';
-import './Navbar.css'
-//dayjs
 import dayjs from 'dayjs';
 import relativeTime from 'dayjs/plugin/relativeTime';
-//redux
 import { useSelector } from 'react-redux';
-//react-router
 import { Link } from 'react-router-dom';
-//Cookie
 import Cookie from 'js-cookie';
-//axios
 import axios from 'axios';
-//utils
 import { url, getHeaders } from '../../utils/utils';
+import './Navbar.css'
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Notifications = ({userId}) => {
+const Notifications = ({userId}) => {
 
     const classes = useStyles();
 
@@ -104,7 +96,7 @@ export const Notifications = ({userId}) => {
 
     return (
         <Fragment>
-            <Tooltip placement="top" title="Notifications" className={classes.tooltip}>
+            <Tooltip placement="top" title="Notifications" classes={{tooltip:classes.tooltip}}>
                 <IconButton aria-haspopup="true" aria-controls="noitification-menu" onClick={handleOpen}>
                     {notificationIcon}
                 </IconButton>
@@ -122,3 +114,6 @@ export const Notifications = ({userId}) => {
         </Fragment>
     )
 }
+
+
+export default Notifications;

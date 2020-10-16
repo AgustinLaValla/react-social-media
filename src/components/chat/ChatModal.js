@@ -6,6 +6,7 @@ import { getUserImage } from '../../utils/utils';
 import ChatHeader from './ChatHeader';
 import ChatContent from './ChatContent';
 import ChatFooter from './ChatFooter';
+import store from '../../redux/store';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMessages } from '../../redux/actions/messagesActions';
 import { CLEAR_MESSAGES, CLEAR_CHAT_USER_DATA } from '../../redux/types';
@@ -46,7 +47,8 @@ const ChatModal = ({ open, handleClose, user, currentUser, socket }) => {
         if (action === 'onScroll') {
             setMessagesLimit(prev => {
                 const totalMessages = getTotalMessages();
-                if (!isNaN(totalMessages) && totalMessages > prev) {
+
+                if (totalMessages > prev) {
                     messagesApiCall(prev + 30);
                     return prev + 30;
                 }
@@ -102,11 +104,9 @@ const ChatModal = ({ open, handleClose, user, currentUser, socket }) => {
     }
 
 
-    const getTotalMessages = () => {
-        return parseInt(JSON.parse(localStorage.getItem('totalMessages')));
-    }
+    const getTotalMessages = () => store.getState().messages.totalMessages;
 
-    const getMessagesLength = () => parseInt(JSON.parse(localStorage.getItem('messagesLength')));
+    const getMessagesLength = () => store.getState().messages.length;
 
     const onChatRefresh = ({ senderId }) => senderId === user._id || senderId === currentUser._id
         ? get_messages('newMessage')

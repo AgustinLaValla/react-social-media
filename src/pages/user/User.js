@@ -1,20 +1,21 @@
 import React, { useEffect, useState } from 'react';
+import Grid from '@material-ui/core/Grid';
+import Box from '@material-ui/core/Box';
+import Post from '../../components/post/Post';
 import { useParams } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
-import { getUser } from '../redux/actions/userActions';
-import { getUserPost } from '../redux/actions/postsActions';
-import Grid from '@material-ui/core/Grid';
-import { Post } from '../components/post/Post';
-import { UserProfile } from '../components/profile/UserProfile';
+import { getUser } from '../../redux/actions/userActions';
+import { getUserPost } from '../../redux/actions/postsActions';
+import  UserProfile  from './UserProfile';
 import { useGoogleLogout } from 'react-google-login';
-import { clientId } from '../utils/utils';
-import { renovateToken } from '../utils/utils';
+import { clientId } from '../../utils/utils';
+import { renovateToken } from '../../utils/utils';
 import { useHistory } from 'react-router-dom';
-import ChatModal from '../components/chat/ChatModal';
-import { OPEN_CHAT_MODAL, CLEAR_CHAT_USER_DATA, CLEAR_MESSAGES, CLEAR_VISITED_USER_DATA } from '../redux/types';
+import ChatModal from '../../components/chat/ChatModal';
+import { OPEN_CHAT_MODAL, CLEAR_CHAT_USER_DATA, CLEAR_MESSAGES, CLEAR_VISITED_USER_DATA } from '../../redux/types';
 
 
-export const User = () => {
+const User = () => {
 
     const { id, postId } = useParams();
 
@@ -74,8 +75,13 @@ export const User = () => {
     }, []);
 
     return (
-        <Grid container className="animated fadeIn">
-            <Grid item sm={8} xs={12}>
+        <Grid container className="animated fadeIn" spacing={2}>
+            <Grid item xs={12}>
+                <Box display={{ sm: 'block', md: 'none' }}>
+                    <UserProfile user={visitedUserData} totalPosts={visitedUserPosts.length} />
+                </Box>
+            </Grid>
+            <Grid item md={8} sm={12}>
                 {visitedUserPosts && visitedUserPosts.length > 0
                     ? visitedUserPosts.map(post =>
                         <Post
@@ -100,9 +106,14 @@ export const User = () => {
                 }
 
             </Grid>
-            <Grid item sm={4} xs={12}>
-                <UserProfile user={visitedUserData} />
+            <Grid item md={4}>
+                <Box display={{ sm: 'none', md: 'block' }}>
+                    <UserProfile user={visitedUserData} totalPosts={visitedUserPosts.length} />
+                </Box>
             </Grid>
         </Grid>
     )
 }
+
+
+export default User;

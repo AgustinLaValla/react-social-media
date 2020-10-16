@@ -6,17 +6,17 @@ import { getStyles } from '../../utils/styles';
 import { getUserImage } from '../../utils/utils';
 import { Link } from 'react-router-dom';
 import dayjs from 'dayjs';
-import { CommentForm } from './CommentForm';
+import CommentForm from './CommentForm';
 
 const useStyles = makeStyles(theme => getStyles(theme));
 
-export const Comments = ({ comments, postId, userId, fromVisitedUser, userProfileRoom }) => {
+const Comments = ({ comments, postId, userId, fromVisitedUser, userProfileRoom }) => {
 
     const classes = useStyles();
 
     return (
         <Grid container className={classes.commentsContainer}>
-            <CommentForm {...{ postId, userId }} fromVisitedUser={fromVisitedUser} userProfileRoom={userProfileRoom}/>
+            <CommentForm {...{ postId, userId }} fromVisitedUser={fromVisitedUser} userProfileRoom={userProfileRoom} />
             {comments.map((comment, index) => (
                 <Grid key={comment._id} container spacing={4}>
                     <Grid item sm={2}>
@@ -48,3 +48,6 @@ export const Comments = ({ comments, postId, userId, fromVisitedUser, userProfil
         </Grid>
     )
 }
+
+
+export default Comments;

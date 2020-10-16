@@ -1,12 +1,11 @@
-import React from 'react';
-import { getStyles } from '../../utils/styles';
+import React, { useState } from 'react';
 import makeStyles from '@material-ui/core/styles/makeStyles';
 import SendIcon from '@material-ui/icons/Send';
 import MyButton from '../../components/layout/MyButton';
-import { useState } from 'react';
+import { url, getHeaders } from '../../utils/utils';
+import { getStyles } from '../../utils/styles';
 import Cookie from 'js-cookie';
 import axios from 'axios';
-import { url, getHeaders } from '../../utils/utils';
 
 
 const useStyles = makeStyles(theme => getStyles(theme));
