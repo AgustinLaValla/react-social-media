@@ -37,14 +37,17 @@ const Users = () => {
     }
 
 
-    const onScroll = () => {
-        setUsersLimit(prev => {
-            if (totalUsers > prev) {
-                dispatch(getUsers(prev + 20));
-                return prev + 20;
-            };
-            return prev;
-        });
+    const onScroll = (ev) => {
+        const scrollingEl = ev.target.scrollingElement;
+        if (scrollingEl.clientHeight + scrollingEl.scrollTop >= scrollingEl.scrollHeight - 1) {
+            setUsersLimit(prev => {
+                if (totalUsers > prev) {
+                    dispatch(getUsers(prev + 20));
+                    return prev + 20;
+                };
+                return prev;
+            });
+        }
     }
 
     useEffect(() => {
@@ -54,18 +57,8 @@ const Users = () => {
 
 
     useEffect(() => {
-        let body = document.getElementsByTagName('body')[0];
-        body.onscroll = function (ev) {
-            if (body) {
-                const top = ev.target.scrollingElement.scrollTop;
-                const clientHeight = body.clientHeight;
-
-                if (clientHeight - top <= 700) {
-                    onScroll();
-                }
-            }
-        };
-        return () => body = null;
+        window.addEventListener('scroll', onScroll);
+        return () => window.removeEventListener('scroll', onScroll);
     }, []);
 
     useEffect(() => {
@@ -89,7 +82,7 @@ const Users = () => {
             </div>
 
             <Grid container >
-                {users.map(user => <User user={user} onlineUsers={onlineUsers}/>)}
+                {users.map(user => <User user={user} onlineUsers={onlineUsers} />)}
             </Grid>
 
 

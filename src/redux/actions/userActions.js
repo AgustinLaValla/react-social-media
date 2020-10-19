@@ -101,6 +101,7 @@ export const getUser = (userId, chatUser = false) => async dispatch => {
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
 
     } catch (error) {
+        console.log(error);
         dispatch({ type: fromTYPES.DEACTIVATE_LINEAR_PROGRESS });
         dispatch({ type: fromTYPES.SET_VISITED_USER_ERRORS, payload: error?.response?.data?.message })
     }

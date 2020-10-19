@@ -3,8 +3,9 @@ import * as fromTYPES from '../types';
 const initialState = {
     posts: [],
     postsLimit: 0,
-    totalPosts:0,
+    totalPosts: 0,
     visitedUserPosts: [],
+    totalVisitedPosts: 0,
     errors: null
 }
 
@@ -30,13 +31,13 @@ export const postsReducer = (state = initialState, action) => {
         case fromTYPES.SET_VISITED_USER_POSTS:
             return {
                 ...state,
-                visitedUserPosts: [ ...action.payload ]
+                visitedUserPosts: [...action.payload]
             }
 
         case fromTYPES.REFRESH_VISITED_USER_POST:
             return {
                 ...state,
-                visitedUserPosts: [...state.visitedUserPosts.map(post => post._id === action.payload._id ? { ...action.payload } : post )]
+                visitedUserPosts: [...state.visitedUserPosts.map(post => post._id === action.payload._id ? { ...action.payload } : post)]
             }
 
         case fromTYPES.SET_POSTS_LIMIT:
@@ -49,6 +50,19 @@ export const postsReducer = (state = initialState, action) => {
             return {
                 ...state,
                 totalPosts: action.payload
+            }
+
+        case fromTYPES.SET_TOTAL_VISITED_USER_POSTS:
+            return {
+                ...state,
+                totalVisitedPosts: action.payload
+            }
+
+        case fromTYPES.CLEAR_VISITED_USER_DATA:
+            return {
+                ...state,
+                visitedUserPosts: [],
+               totalVisitedPosts: 0
             }
 
         default:

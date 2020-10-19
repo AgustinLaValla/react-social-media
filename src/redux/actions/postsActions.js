@@ -65,8 +65,11 @@ export const addComment = (postId, userId, comment, socket, fromVisitedUser, use
     }
 }
 
-export const getUserPost = userId => async dispatch => {
+export const getUserPost = (userId, limit)=> async dispatch => {
     const token = Cookie.getJSON('token');
-    axios.get(`${url}/posts/get_user_posts/${userId}`, getHeaders(token))
-        .then(({ data }) => dispatch({ type: fromTYPES.SET_VISITED_USER_POSTS, payload: data.posts }))
+    axios.get(`${url}/posts/get_user_posts/${userId}?limit=${limit}`, getHeaders(token))
+        .then(({ data }) => (
+            dispatch({ type: fromTYPES.SET_VISITED_USER_POSTS, payload: data.posts }),
+            dispatch({type: fromTYPES.SET_TOTAL_VISITED_USER_POSTS, payload: data.total})
+        ));
 }
